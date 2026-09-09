@@ -1,0 +1,1245 @@
+@import "tailwindcss";
+
+:root {
+  --background: #020617;
+  --foreground: #f8fafc;
+}
+
+html,
+body {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  position: relative;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Mobile Form Inputs: prevent iOS Safari auto-zoom */
+@media (max-width: 640px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* 1. Brand Logo Dash & Spin SVG Animation */
+.logo-loader-container {
+  display: inline-flex;
+  align-items: center;
+  margin: 0.25em 0;
+  position: relative;
+}
+
+.logo-dash {
+  animation: dashArray 2s ease-in-out infinite,
+    dashOffset 2s linear infinite;
+}
+
+.logo-spin {
+  animation: spinDashArray 2s ease-in-out infinite,
+    spin 8s ease-in-out infinite,
+    dashOffset 2s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes dashArray {
+  0% {
+    stroke-dasharray: 0 1 359 0;
+  }
+  50% {
+    stroke-dasharray: 0 359 1 0;
+  }
+  100% {
+    stroke-dasharray: 359 1 0 0;
+  }
+}
+
+@keyframes spinDashArray {
+  0% {
+    stroke-dasharray: 270 90;
+  }
+  50% {
+    stroke-dasharray: 0 360;
+  }
+  100% {
+    stroke-dasharray: 270 90;
+  }
+}
+
+@keyframes dashOffset {
+  0% {
+    stroke-dashoffset: 365;
+  }
+  100% {
+    stroke-dashoffset: 5;
+  }
+}
+
+@keyframes spin {
+  0% {
+    rotate: 0deg;
+  }
+  12.5%,
+  25% {
+    rotate: 270deg;
+  }
+  37.5%,
+  50% {
+    rotate: 540deg;
+  }
+  62.5%,
+  75% {
+    rotate: 810deg;
+  }
+  87.5%,
+  100% {
+    rotate: 1080deg;
+  }
+}
+
+/* 2. Truck Loader Animation */
+.truck-loader {
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.truckWrapper {
+  width: 200px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-items: center;
+  justify-content: flex-end;
+  overflow-x: hidden;
+}
+
+.truckBody {
+  width: 130px;
+  height: fit-content;
+  margin-bottom: 6px;
+  animation: motion 1s linear infinite;
+}
+
+@keyframes motion {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(3px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.truckTires {
+  width: 130px;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 10px 0px 15px;
+  position: absolute;
+  bottom: 0;
+}
+
+.truckTires svg {
+  width: 24px;
+}
+
+.road {
+  width: 100%;
+  height: 2px;
+  background-color: #383838;
+  position: relative;
+  bottom: 0;
+  align-self: flex-end;
+  border-radius: 3px;
+}
+
+.road::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 100%;
+  background-color: #383838;
+  right: -50%;
+  border-radius: 3px;
+  animation: roadAnimation 1.4s linear infinite;
+  border-left: 10px solid #10b981;
+}
+
+.road::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 100%;
+  background-color: #383838;
+  right: -65%;
+  border-radius: 3px;
+  animation: roadAnimation 1.4s linear infinite;
+  border-left: 4px solid #38bdf8;
+}
+
+.lampPost {
+  position: absolute;
+  bottom: 0;
+  right: -90%;
+  height: 90px;
+  animation: roadAnimation 1.4s linear infinite;
+}
+
+@keyframes roadAnimation {
+  0% {
+    transform: translateX(0px);
+  }
+  100% {
+    transform: translateX(-350px);
+  }
+}
+
+
+
+/* 4. Social & Redirection Buttons */
+.social-card {
+  height: fit-content;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  padding: 10px 14px;
+  border-radius: 16px;
+  border: 1px solid #1e293b;
+}
+
+.socialBtn {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: transparent;
+  position: relative;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.socialBtn .svgContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  backdrop-filter: blur(0px);
+  letter-spacing: 0.8px;
+  border-radius: 10px;
+  transition: all 0.3s;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  z-index: 2;
+  color: #ffffff;
+}
+
+.socialBtn .BG {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #181818;
+  z-index: 1;
+  border-radius: 10px;
+  pointer-events: none;
+  transition: all 0.3s;
+  font-size: 0px;
+}
+
+.socialBtn.phone .BG {
+  background: #059669;
+}
+
+.socialBtn.whatsapp .BG {
+  background: #25d366;
+}
+
+.socialBtn.map .BG {
+  background: #ea4335;
+}
+
+.socialBtn:hover .BG {
+  transform: scale(1.35);
+  font-size: 20px;
+  color: white;
+}
+
+.socialBtn:hover .svgContainer {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+}
+
+/* 5. Scroll to Top Button */
+.scrollToTopBtn {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(#44ea76, #39fad7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  border: none;
+  box-shadow: 0 10px 25px rgba(57, 250, 215, 0.35);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  z-index: 45;
+}
+
+.scrollToTopBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(57, 250, 215, 0.5);
+}
+
+.scrollToTopBtn .arrow path {
+  fill: #022c22;
+}
+
+.scrollToTopBtn .text {
+  font-size: 0.72em;
+  font-weight: 700;
+  width: 100px;
+  position: absolute;
+  color: #ffffff;
+  background-color: rgba(15, 23, 42, 0.95);
+  border: 1px solid #334155;
+  padding: 3px 8px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: -28px;
+  opacity: 0;
+  pointer-events: none;
+  transition-duration: .5s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.scrollToTopBtn:hover .text {
+  opacity: 1;
+  transition-duration: .5s;
+}
+
+.scrollToTopBtn:hover .arrow {
+  animation: slide-in-bottom .7s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+@keyframes slide-in-bottom {
+  0% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* 6. Status Cards (Red, Blue, Green) */
+.status-cards {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-cards .red {
+  background-color: #f43f5e;
+}
+
+.status-cards .blue {
+  background-color: #3b82f6;
+}
+
+.status-cards .green {
+  background-color: #22c55e;
+}
+
+.status-cards .status-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  height: 105px;
+  width: 220px;
+  border-radius: 14px;
+  color: white;
+  cursor: pointer;
+  transition: all 400ms cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.status-cards .status-card p.tip {
+  font-size: 1.25em;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 2px;
+}
+
+.status-cards .status-card p.second-text {
+  font-size: 0.75em;
+  font-weight: 600;
+  opacity: 0.95;
+}
+
+.status-cards .status-card:hover {
+  transform: scale(1.08, 1.08);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+/* ===================================================
+   7. Menu List Animated Button (.menu-btn)
+   =================================================== */
+.menu-btn {
+  width: 110px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  color: #f1f5f9;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+@media (min-width: 1280px) {
+  .menu-btn {
+    width: 122px;
+  }
+}
+
+.menu-btn:hover {
+  box-shadow: 0 0 16px 0px rgba(16, 185, 129, 0.35);
+  border-color: rgba(16, 185, 129, 0.5);
+  background: rgba(15, 23, 42, 0.98);
+}
+
+.menu-btn.active {
+  border-color: rgba(16, 185, 129, 0.6);
+  background: rgba(16, 185, 129, 0.15);
+  box-shadow: 0 0 12px 0px rgba(16, 185, 129, 0.2);
+}
+
+.menu-btn .icon {
+  position: absolute;
+  left: 0;
+  height: 100%;
+  width: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #10b981;
+}
+
+.menu-btn.active .icon {
+  color: #34d399;
+}
+
+.menu-btn .text {
+  transform: translateX(34px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.menu-btn.active .text {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* The hover effect: text slides away, icon/emoji glides smoothly to center */
+.menu-btn:hover .icon {
+  width: 100%;
+  color: #38bdf8;
+  transform: scale(1.2);
+}
+
+.menu-btn:hover .text {
+  opacity: 0;
+  transform: translateX(75px);
+}
+
+.menu-btn:focus {
+  outline: none;
+}
+
+.menu-btn:active .icon {
+  transform: scale(0.9);
+}
+
+/* Mobile drawer full width variant */
+.menu-btn.btn-col {
+  width: 100%;
+  height: 48px;
+  border-radius: 12px;
+}
+.menu-btn.btn-col .icon {
+  width: 48px;
+}
+.menu-btn.btn-col .text {
+  transform: translateX(48px);
+  font-size: 13px;
+}
+.menu-btn.btn-col:hover .text {
+  transform: translateX(95px);
+}
+/* ===================================================
+   8. Luxury Brand Intro Card (.luxury-intro-card)
+   =================================================== */
+.luxury-intro-card {
+  width: 320px;
+  height: 210px;
+  background: #1a2327;
+  position: relative;
+  display: grid;
+  place-content: center;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: all 0.5s ease-in-out;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(189, 159, 103, 0.2);
+  cursor: pointer;
+  user-select: none;
+}
+
+.luxury-intro-card #logo-main,
+.luxury-intro-card #logo-second {
+  height: 100%;
+}
+
+.luxury-intro-card #logo-main {
+  fill: #bd9f67;
+}
+
+.luxury-intro-card #logo-second {
+  padding-bottom: 10px;
+  fill: none;
+  stroke: #bd9f67;
+  stroke-width: 1px;
+}
+
+.luxury-intro-card .card-border {
+  position: absolute;
+  inset: 0px;
+  border: 2px solid #bd9f67;
+  opacity: 0;
+  transform: rotate(10deg);
+  transition: all 0.5s ease-in-out;
+  pointer-events: none;
+}
+
+.luxury-intro-card .bottom-text {
+  position: absolute;
+  left: 50%;
+  bottom: 13px;
+  transform: translateX(-50%);
+  font-size: 7px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0px 8px;
+  color: #bd9f67;
+  background: #1a2327;
+  opacity: 0;
+  letter-spacing: 7px;
+  transition: all 0.5s ease-in-out;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.luxury-intro-card .content {
+  transition: all 0.5s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.luxury-intro-card .content .logo {
+  height: 38px;
+  position: relative;
+  width: 56px;
+  overflow: hidden;
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.luxury-intro-card .content .logo .logo1 {
+  height: 38px;
+  width: 56px;
+  position: absolute;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.luxury-intro-card .content .logo .logo2 {
+  height: 38px;
+  position: absolute;
+  left: 60px;
+  display: flex;
+  align-items: center;
+}
+
+.luxury-intro-card .content .logo .trail {
+  position: absolute;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+}
+
+.luxury-intro-card .content .logo-bottom-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin-top: 32px;
+  color: #bd9f67;
+  padding-left: 8px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  opacity: 0;
+  letter-spacing: normal;
+  transition: all 0.5s ease-in-out 0.4s;
+  white-space: nowrap;
+}
+
+.luxury-intro-card:hover,
+.luxury-intro-card.active {
+  border-radius: 4px;
+  transform: scale(1.05);
+  box-shadow: 0 20px 45px rgba(189, 159, 103, 0.25);
+}
+
+.luxury-intro-card:hover .logo,
+.luxury-intro-card.active .logo {
+  width: 195px;
+  animation: logoOpacity 1s ease-in-out;
+}
+
+.luxury-intro-card:hover .card-border,
+.luxury-intro-card.active .card-border {
+  inset: 15px;
+  opacity: 1;
+  transform: rotate(0);
+}
+
+.luxury-intro-card:hover .bottom-text,
+.luxury-intro-card.active .bottom-text {
+  letter-spacing: 3px;
+  opacity: 1;
+  transform: translateX(-50%);
+}
+
+.luxury-intro-card:hover .content .logo-bottom-text,
+.luxury-intro-card.active .content .logo-bottom-text {
+  opacity: 1;
+  letter-spacing: 9.5px;
+}
+
+.luxury-intro-card:hover .trail,
+.luxury-intro-card.active .trail {
+  animation: logoTrail 1s ease-in-out;
+}
+
+@keyframes logoOpacity {
+  0% {
+    border-right: 1px solid transparent;
+  }
+  10% {
+    border-right: 1px solid #bd9f67;
+  }
+  80% {
+    border-right: 1px solid #bd9f67;
+  }
+  100% {
+    border-right: 1px solid transparent;
+  }
+}
+
+@keyframes logoTrail {
+  0% {
+    background: linear-gradient(90deg, rgba(189, 159, 103, 0) 90%, rgb(189, 159, 103) 100%);
+    opacity: 0;
+  }
+  30% {
+    background: linear-gradient(90deg, rgba(189, 159, 103, 0) 70%, rgb(189, 159, 103) 100%);
+    opacity: 1;
+  }
+  70% {
+    background: linear-gradient(90deg, rgba(189, 159, 103, 0) 70%, rgb(189, 159, 103) 100%);
+    opacity: 1;
+  }
+  95% {
+    background: linear-gradient(90deg, rgba(189, 159, 103, 0) 90%, rgb(189, 159, 103) 100%);
+    opacity: 0;
+  }
+}
+
+/* Large / Hero Splash variant (.card-lg) */
+.luxury-intro-card.card-lg {
+  width: 680px;
+  max-width: 92vw;
+  height: 420px;
+  border-radius: 20px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), 0 0 50px rgba(189, 159, 103, 0.25);
+  border: 1.5px solid rgba(189, 159, 103, 0.4);
+}
+
+.luxury-intro-card.card-lg .card-border {
+  border-width: 2.5px;
+}
+
+.luxury-intro-card.card-lg .bottom-text {
+  bottom: 24px;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 18px;
+  letter-spacing: 8px;
+  border-radius: 4px;
+}
+
+.luxury-intro-card.card-lg .content .logo {
+  height: 74px;
+  width: 104px;
+}
+
+.luxury-intro-card.card-lg .content .logo .logo1 {
+  height: 74px;
+  width: 104px;
+}
+
+.luxury-intro-card.card-lg .content .logo .logo2 {
+  height: 74px;
+  left: 114px;
+}
+
+.luxury-intro-card.card-lg .content .logo-bottom-text {
+  margin-top: 66px;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: normal;
+  text-shadow: 0 2px 12px rgba(189, 159, 103, 0.4);
+}
+
+.luxury-intro-card.card-lg:hover,
+.luxury-intro-card.card-lg.active {
+  border-radius: 8px;
+  transform: scale(1.02);
+  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.9), 0 0 65px rgba(189, 159, 103, 0.35);
+}
+
+.luxury-intro-card.card-lg:hover .logo,
+.luxury-intro-card.card-lg.active .logo {
+  width: 385px;
+}
+
+.luxury-intro-card.card-lg:hover .card-border,
+.luxury-intro-card.card-lg.active .card-border {
+  inset: 22px;
+  opacity: 1;
+  transform: rotate(0);
+}
+
+.luxury-intro-card.card-lg:hover .bottom-text,
+.luxury-intro-card.card-lg.active .bottom-text {
+  letter-spacing: 5px;
+  opacity: 1;
+}
+
+.luxury-intro-card.card-lg:hover .content .logo-bottom-text,
+.luxury-intro-card.card-lg.active .content .logo-bottom-text {
+  opacity: 1;
+  letter-spacing: 16px;
+}
+
+/* Responsive adjustments for mobile screens */
+@media (max-width: 640px) {
+  .luxury-intro-card.card-lg {
+    width: 90vw;
+    height: 270px;
+    border-radius: 14px;
+  }
+
+  .luxury-intro-card.card-lg .card-border {
+    border-width: 2px;
+  }
+
+  .luxury-intro-card.card-lg .bottom-text {
+    bottom: 12px;
+    font-size: 8px;
+    padding: 1px 10px;
+    letter-spacing: 4px;
+  }
+
+  .luxury-intro-card.card-lg:hover .bottom-text,
+  .luxury-intro-card.card-lg.active .bottom-text {
+    letter-spacing: 2.5px;
+  }
+
+  .luxury-intro-card.card-lg .content .logo {
+    height: 48px;
+    width: 72px;
+  }
+
+  .luxury-intro-card.card-lg .content .logo .logo1 {
+    height: 48px;
+    width: 72px;
+  }
+
+  .luxury-intro-card.card-lg .content .logo .logo2 {
+    height: 48px;
+    left: 76px;
+  }
+
+  .luxury-intro-card.card-lg:hover .logo,
+  .luxury-intro-card.card-lg.active .logo {
+    width: 265px;
+  }
+
+  .luxury-intro-card.card-lg .content .logo-bottom-text {
+    margin-top: 42px;
+    font-size: 13px;
+    letter-spacing: normal;
+  }
+
+  .luxury-intro-card.card-lg:hover .content .logo-bottom-text,
+  .luxury-intro-card.card-lg.active .content .logo-bottom-text {
+    letter-spacing: 10px;
+  }
+
+  .luxury-intro-card.card-lg:hover .card-border,
+  .luxury-intro-card.card-lg.active .card-border {
+    inset: 14px;
+  }
+}
+
+/* ===================================================
+   9. Nearby Locations 3x3 Expanding Grid Widget
+   =================================================== */
+.locations-widget-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 250px;
+  padding: 24px;
+}
+
+.locations-widget-back {
+  position: absolute;
+  border-radius: 28px;
+  width: 216px;
+  height: 216px;
+  background: radial-gradient(circle at center, rgba(16, 185, 129, 0.28), rgba(245, 158, 11, 0.18), transparent 75%);
+  filter: blur(16px);
+  z-index: 1;
+  transition: all 0.5s ease-in-out;
+  pointer-events: none;
+}
+
+.locations-widget-main {
+  display: grid;
+  grid-template-columns: repeat(3, 68px);
+  grid-template-rows: repeat(3, 68px);
+  gap: 0px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+  transition: gap 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  border-radius: 16px;
+}
+
+.locations-widget-main .loc-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 68px;
+  height: 68px;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+  text-decoration: none;
+}
+
+.locations-widget-main .loc-card .loc-icon {
+  opacity: 0;
+  transition: 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  transform: scale(0.7);
+}
+
+.locations-widget-main .loc-card .loc-tooltip {
+  position: absolute;
+  bottom: -24px;
+  font-size: 9px;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.2s ease-in-out;
+  background: rgba(2, 6, 23, 0.95);
+  padding: 3px 7px;
+  border-radius: 6px;
+  border: 1px solid #334155;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  z-index: 20;
+}
+
+/* Base unhovered corners so the 9 cards look like 1 seamless rounded card */
+.locations-widget-main .loc-card:nth-of-type(1) { border-top-left-radius: 16px; }
+.locations-widget-main .loc-card:nth-of-type(3) { border-top-right-radius: 16px; }
+.locations-widget-main .loc-card:nth-of-type(7) { border-bottom-left-radius: 16px; }
+.locations-widget-main .loc-card:nth-of-type(9) { border-bottom-right-radius: 16px; }
+
+.locations-widget-container .center-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.9em;
+  transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+  color: #ffffff;
+  text-align: center;
+  font-weight: 900;
+  letter-spacing: 0.3em;
+  z-index: 10;
+  pointer-events: none;
+  text-transform: uppercase;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95);
+  white-space: nowrap;
+}
+
+/* Hover State */
+.locations-widget-container:hover .locations-widget-main,
+.locations-widget-main:hover {
+  gap: 8px;
+  box-shadow: none;
+}
+
+.locations-widget-container:hover .center-text,
+.locations-widget-main:hover .center-text {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.5);
+}
+
+.locations-widget-container:hover .loc-card,
+.locations-widget-main:hover .loc-card {
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(30, 41, 59, 0.85);
+}
+
+.locations-widget-container:hover .loc-card .loc-icon,
+.locations-widget-main:hover .loc-card .loc-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.locations-widget-main .loc-card:hover {
+  transform: scale(1.18);
+  z-index: 10;
+}
+
+.locations-widget-main .loc-card:hover .loc-tooltip {
+  opacity: 1;
+  bottom: -28px;
+}
+
+.locations-widget-main .loc-card:nth-of-type(1):hover { background-color: #0284c7; }
+.locations-widget-main .loc-card:nth-of-type(2):hover { background-color: #059669; }
+.locations-widget-main .loc-card:nth-of-type(3):hover { background-color: #d97706; }
+.locations-widget-main .loc-card:nth-of-type(4):hover { background-color: #e11d48; }
+.locations-widget-main .loc-card:nth-of-type(5):hover { background-color: #7c3aed; }
+.locations-widget-main .loc-card:nth-of-type(6):hover { background-color: #2563eb; }
+.locations-widget-main .loc-card:nth-of-type(7):hover { background-color: #0d9488; }
+.locations-widget-main .loc-card:nth-of-type(8):hover { background-color: #ea580c; }
+.locations-widget-main .loc-card:nth-of-type(9):hover { background-color: #4f46e5; }
+
+/* ===================================================
+   10. Search Loader with Honeycomb & Wave Letters
+   =================================================== */
+.search-loader-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  gap: 20px;
+}
+
+.loader-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  user-select: none;
+  gap: 12px;
+}
+
+.search-ring-loader {
+  width: 22px;
+  height: 22px;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background-color: transparent;
+  animation: loader-rotate 1.5s linear infinite;
+  z-index: 0;
+}
+
+@keyframes loader-rotate {
+  0% {
+    transform: rotate(90deg);
+    box-shadow:
+      0 1px 1px 0 #fff inset,
+      0 3px 5px 0 #ff5f9f inset,
+      0 4px 4px 0 #0693ff inset;
+  }
+  50% {
+    transform: rotate(270deg);
+    background: #064e3b;
+    box-shadow:
+      0 1px 1px 0 #fff inset,
+      0 3px 5px 0 #10b981 inset,
+      0 4px 4px 0 #fbef19 inset;
+  }
+  100% {
+    transform: rotate(450deg);
+    box-shadow:
+      0 1px 1px 0 #fff inset,
+      0 3px 5px 0 #ff5f9f inset,
+      0 4px 4px 0 #28a9ff inset;
+  }
+}
+
+.letter-wrapper {
+  display: flex;
+  gap: 2px;
+}
+
+.loader-letter {
+  display: inline-block;
+  opacity: 0.4;
+  transform: translateY(0);
+  animation: loader-letter-anim 2s infinite;
+  z-index: 1;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #38bdf8;
+}
+
+.loader-letter:nth-child(1) { animation-delay: 0s; }
+.loader-letter:nth-child(2) { animation-delay: 0.1s; }
+.loader-letter:nth-child(3) { animation-delay: 0.2s; }
+.loader-letter:nth-child(4) { animation-delay: 0.3s; }
+.loader-letter:nth-child(5) { animation-delay: 0.4s; }
+.loader-letter:nth-child(6) { animation-delay: 0.5s; }
+.loader-letter:nth-child(7) { animation-delay: 0.6s; }
+.loader-letter:nth-child(8) { animation-delay: 0.7s; }
+.loader-letter:nth-child(9) { animation-delay: 0.8s; }
+.loader-letter:nth-child(10) { animation-delay: 0.9s; }
+
+@keyframes loader-letter-anim {
+  0%, 100% {
+    opacity: 0.4;
+    transform: translateY(0);
+  }
+  20% {
+    opacity: 1;
+    transform: scale(1.18);
+    color: #10b981;
+  }
+  40% {
+    opacity: 0.7;
+    transform: translateY(0);
+  }
+}
+
+/* Honeycomb Socket Grid */
+.honeycomb-socket {
+  width: 140px;
+  height: 120px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hex-brick {
+  background: #10b981;
+  width: 22px;
+  height: 13px;
+  position: absolute;
+  top: 3px;
+  animation: fade00 2s infinite;
+  border-radius: 2px;
+}
+
+.h2 {
+  transform: rotate(60deg);
+}
+
+.h3 {
+  transform: rotate(-60deg);
+}
+
+.gel {
+  height: 22px;
+  width: 22px;
+  transition: all .3s;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.center-gel {
+  margin-left: -11px;
+  margin-top: -11px;
+  animation: pulse00 2s infinite;
+}
+
+.c1 { margin-left: -35px; margin-top: -11px; }
+.c2 { margin-left: -23px; margin-top: -32px; }
+.c3 { margin-left: 1px; margin-top: -32px; }
+.c4 { margin-left: 13px; margin-top: -11px; }
+.c5 { margin-left: -23px; margin-top: 10px; }
+.c6 { margin-left: 1px; margin-top: 10px; }
+
+.r1 { animation: pulse00 2s infinite; animation-delay: .2s; }
+.r2 { animation: pulse00 2s infinite; animation-delay: .4s; }
+
+.r1 > .hex-brick { animation: fade00 2s infinite; animation-delay: .2s; }
+.r2 > .hex-brick { animation: fade00 2s infinite; animation-delay: .4s; }
+
+@keyframes pulse00 {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.1); opacity: 0.3; }
+  100% { transform: scale(1); }
+}
+
+@keyframes fade00 {
+  0% { background: #10b981; }
+  50% { background: #0369a1; }
+  100% { background: #f59e0b; }
+}
+
+/* ===================================================
+   11. Gradient 3D Tilting Card
+   =================================================== */
+.gradient-tilt-card {
+  position: relative;
+  width: 320px;
+  height: 210px;
+  background: linear-gradient(-45deg, #f89b29 0%, #ff0f7b 100% );
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.gradient-tilt-card svg.tilt-icon {
+  width: 48px;
+  height: 48px;
+  fill: #ffffff;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.gradient-tilt-card:hover {
+  transform: rotate(-5deg) scale(1.08);
+  box-shadow: 0 15px 35px rgba(255, 15, 123, 0.35);
+}
+
+.gradient-tilt-card__content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  width: 100%;
+  height: 100%;
+  padding: 24px;
+  box-sizing: border-box;
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.gradient-tilt-card:hover .gradient-tilt-card__content {
+  transform: translate(-50%, -50%) rotate(0deg);
+  opacity: 1;
+}
+
+.gradient-tilt-card__title {
+  margin: 0;
+  font-size: 20px;
+  color: #ffffff;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.gradient-tilt-card__description {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+.gradient-tilt-card:hover svg.tilt-icon {
+  transform: scale(0) rotate(-45deg);
+}
