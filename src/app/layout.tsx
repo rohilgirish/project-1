@@ -6,6 +6,7 @@ import Footer from '@/components/layout/Footer';
 import StickyCTA from '@/components/layout/StickyCTA';
 import ExitIntentPopup from '@/components/home/ExitIntentPopup';
 import ScrollToTop from '@/components/ui/ScrollToTop';
+import { Toaster } from 'sonner';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -49,6 +50,19 @@ export default function RootLayout({
         <ExitIntentPopup />
         {/* Scroll To Top Button ("to goo to the top") */}
         <ScrollToTop />
+        {/* Emil Kowalski's Sonner Toast Provider */}
+        <Toaster
+          position="bottom-right"
+          theme="dark"
+          toastOptions={{
+            style: {
+              background: '#0f172a',
+              border: '1px solid rgba(189, 159, 103, 0.3)',
+              color: '#f8fafc',
+              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5)',
+            },
+          }}
+        />
       </body>
     </html>
   );

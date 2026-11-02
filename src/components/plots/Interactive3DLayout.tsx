@@ -1186,23 +1186,35 @@ export default function Interactive3DLayout({ plots, selectedPlot, onSelectPlot,
         </div>
       </div>
 
-      {/* Floating Zoom Controls & Compass */}
+      {/* Floating Zoom Controls & Vastu Compass (Taste & Emil Kowalski refinement) */}
       <div className="absolute bottom-5 right-5 flex flex-col items-center gap-2 pointer-events-auto z-20">
         <div
-          className="relative w-12 h-12 bg-slate-900/90 backdrop-blur-md rounded-full border border-slate-700 shadow-xl flex items-center justify-center transition-transform"
-          title="Bearing to North"
+          className="relative w-14 h-14 bg-slate-950/90 backdrop-blur-md rounded-full border border-amber-500/30 shadow-2xl flex items-center justify-center transition-transform"
+          title="Vastu Compass (Rotates dynamically with 3D camera)"
         >
+          {/* Outer ring cardinal ticks */}
+          <span className="absolute top-1 text-[8px] font-black text-rose-400">N</span>
+          <span className="absolute right-1 text-[8px] font-bold text-amber-300">E</span>
+          <span className="absolute bottom-1 text-[8px] font-medium text-slate-400">S</span>
+          <span className="absolute left-1 text-[8px] font-medium text-slate-400">W</span>
+
           <div
             className="w-full h-full flex items-center justify-center transition-transform duration-100 ease-out"
             style={{ transform: `rotate(${-compassAngle}deg)` }}
           >
             <div className="flex flex-col items-center">
-              <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-b-[10px] border-b-rose-500" />
-              <div className="w-0.5 h-3 bg-slate-500 my-0.5" />
-              <span className="text-[9px] font-black text-white">N</span>
+              <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-b-[12px] border-b-rose-500 shadow-sm" />
+              <div className="w-0.5 h-3 bg-amber-400/80 my-0.5" />
+              <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[8px] border-t-slate-400" />
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Mobile Touch Navigation Hint */}
+      <div className="sm:hidden absolute top-4 left-1/2 -translate-x-1/2 bg-slate-950/85 backdrop-blur-md border border-slate-700/80 text-[10px] text-slate-200 px-3.5 py-1 rounded-full pointer-events-none z-20 shadow-xl flex items-center gap-1.5 whitespace-nowrap">
+        <Compass className="w-3 h-3 text-amber-400" />
+        <span>Drag to rotate 3D • Tap plot to view details</span>
       </div>
 
       {/* Hovered Plot Quick Tooltip */}

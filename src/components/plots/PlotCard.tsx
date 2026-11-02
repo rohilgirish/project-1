@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React from 'react';
 import { Plot } from '@/types';
@@ -28,7 +28,7 @@ export default function PlotCard({
   return (
     <div
       onClick={() => onSelect(plot)}
-      className="group relative bg-slate-900/90 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col cursor-pointer"
+      className="group relative bg-slate-900/90 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-200 active:scale-[0.99] flex flex-col cursor-pointer"
     >
       {/* Card Image Thumbnail */}
       <div className="relative aspect-video w-full overflow-hidden bg-slate-950">
@@ -89,10 +89,20 @@ export default function PlotCard({
 
         {/* Badges */}
         <div className="flex flex-wrap gap-1 min-h-[22px]">
-          {plot.badges.slice(0, 2).map((b, i) => (
+          {(plot.facing === 'East' || plot.facing === 'North') && (
+            <span className="text-[10px] font-bold bg-emerald-500/10 text-emerald-300 px-2 py-0.5 rounded-md border border-emerald-500/20">
+              Vastu Prime
+            </span>
+          )}
+          {plot.isCorner && (
+            <span className="text-[10px] font-bold bg-amber-500/10 text-amber-300 px-2 py-0.5 rounded-md border border-amber-500/20">
+              Corner
+            </span>
+          )}
+          {plot.badges.slice(0, 1).map((b, i) => (
             <span
               key={i}
-              className="text-[10px] font-medium bg-slate-800 text-amber-300/90 px-2 py-0.5 rounded-md border border-slate-700/60"
+              className="text-[10px] font-medium bg-slate-800 text-slate-300 px-2 py-0.5 rounded-md border border-slate-700/60"
             >
               {b}
             </span>

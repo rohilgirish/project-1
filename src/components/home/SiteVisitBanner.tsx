@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Calendar, Phone, CheckCircle2, ArrowRight, ShieldCheck, Car, Compass } from 'lucide-react';
+import { Calendar, Phone, CheckCircle2, ArrowRight, ShieldCheck, Car, Compass, MapPin } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { submitLead } from '@/lib/leads';
 
@@ -11,6 +11,20 @@ export default function SiteVisitBanner() {
   const [date, setDate] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
+  const getUpcomingDate = (targetDay: number, weeksAhead = 0) => {
+    const now = new Date();
+    const result = new Date(now);
+    const day = now.getDay();
+    let diff = (targetDay + 7 - day) % 7;
+    if (diff === 0 && weeksAhead === 0) diff = 7;
+    result.setDate(now.getDate() + diff + (weeksAhead * 7));
+    return result.toISOString().split('T')[0];
+  };
+
+  const saturdayDate = getUpcomingDate(6);
+  const sundayDate = getUpcomingDate(0);
+  const nextWeekendDate = getUpcomingDate(6, 1);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -119,9 +133,52 @@ export default function SiteVisitBanner() {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] text-slate-400 uppercase font-semibold mb-1">
-                      Preferred Date
-                    </label>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="text-[11px] text-slate-400 uppercase font-semibold">
+                        Preferred Visit Date
+                      </label>
+                      <span className="text-[10px] text-amber-400/90 font-medium">Quick Select</span>
+                    </div>
+
+                    {/* Quick Date Chips (Emil Kowalski micro-interactions) */}
+                    <div className="flex items-center gap-1.5 mb-2 overflow-x-auto pb-1 scrollbar-none">
+                      <button
+                        type="button"
+                        onClick={() => setDate(saturdayDate)}
+                        className={`text-[10px] px-2.5 py-1 rounded-lg border font-medium transition-all active:scale-95 cursor-pointer whitespace-nowrap ${
+                          date === saturdayDate
+                            ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300 font-bold'
+                            : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
+                        }`}
+                      >
+                        This Saturday
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setDate(sundayDate)}
+                        className={`text-[10px] px-2.5 py-1 rounded-lg border font-medium transition-all active:scale-95 cursor-pointer whitespace-nowrap ${
+                          date === sundayDate
+                            ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300 font-bold'
+                            : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
+                        }`}
+                      >
+                        This Sunday
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setDate(nextWeekendDate)}
+                        className={`text-[10px] px-2.5 py-1 rounded-lg border font-medium transition-all active:scale-95 cursor-pointer whitespace-nowrap ${
+                          date === nextWeekendDate
+                            ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300 font-bold'
+                            : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-slate-500'
+                        }`}
+                      >
+                        Next Weekend
+                      </button>
+                    </div>
+
                     <input
                       type="date"
                       value={date}
@@ -133,11 +190,33 @@ export default function SiteVisitBanner() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition-all cursor-pointer"
+                    className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition-all hover:scale-[1.01] active:scale-[0.98] cursor-pointer"
                   >
                     <span>{submitting ? 'Confirming Appointment...' : 'Confirm Site Visit Appointment'}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
+
+                  {/* Micro Trust Indicators */}
+                  <div className="flex items-center justify-center gap-2 text-[10px] text-slate-400 pt-1">
+                    <span>🔒 100% Privacy</span>
+                    <span>•</span>
+                    <span>No Spam Calls</span>
+                    <span>•</span>
+                    <span>Direct Developer</span>
+                  </div>
+
+                  {/* Google Maps site gate navigation */}
+                  <div className="pt-1 text-center">
+                    <a
+                      href="https://maps.google.com/?q=Sakrayapatna,Chikkamagaluru,Karnataka"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-[11px] text-slate-400 hover:text-amber-300 transition-colors"
+                    >
+                      <MapPin className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Get Driving Directions to Site Gate (Google Maps)</span>
+                    </a>
+                  </div>
                 </form>
               )}
             </div>

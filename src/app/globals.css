@@ -26,6 +26,51 @@ body {
   }
 }
 
+/* ==========================================================================
+   Emil Kowalski Motion Principles (animations.dev)
+   Snappy springs, origin-aware transitions, GPU-only transforms (<300ms)
+   ========================================================================== */
+.emil-spring-modal {
+  animation: emilSpringIn 240ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes emilSpringIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .emil-drawer-responsive {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    max-height: 88vh !important;
+    animation: emilDrawerUp 260ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  }
+}
+
+@keyframes emilDrawerUp {
+  from {
+    opacity: 0.6;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* 1. Brand Logo Dash & Spin SVG Animation */
 .logo-loader-container {
   display: inline-flex;

@@ -1,4 +1,5 @@
 import { Lead } from '@/types';
+import { toast } from 'sonner';
 
 export async function submitLead(leadData: Omit<Lead, 'id' | 'createdAt'>): Promise<{ success: boolean; lead: Lead }> {
   const lead: Lead = {
@@ -27,11 +28,20 @@ export async function submitLead(leadData: Omit<Lead, 'id' | 'createdAt'>): Prom
     });
     if (res.ok) {
       const data = await res.json();
+      toast.success('Inquiry Recorded Successfully', {
+        description: `Thank you ${lead.fullName}! Our land specialist has received your request.`,
+        duration: 4000,
+      });
       return { success: true, lead: data.lead || lead };
     }
   } catch (err) {
     console.warn('Cloud database sync error (saved locally):', err);
   }
+
+  toast.success('Request Received', {
+    description: `Thank you ${lead.fullName}! We will contact you at ${lead.phone}.`,
+    duration: 4000,
+  });
 
   return { success: true, lead };
 }

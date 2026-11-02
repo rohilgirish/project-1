@@ -66,6 +66,32 @@ export default function HeroSection() {
           </Link>
         </div>
 
+        {/* Instant Plot Finder Quick Chips (Taste-133 & Impeccable pattern) */}
+        <div className="flex flex-wrap items-center justify-center gap-2 pt-1 text-xs">
+          <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold mr-1">
+            Instant Filter:
+          </span>
+          <Link
+            href="/plots"
+            className="px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-700/80 hover:border-amber-400/80 text-slate-200 hover:text-white transition-all active:scale-95"
+          >
+            30 × 40 ft (1,200 sq.ft)
+          </Link>
+          <Link
+            href="/plots"
+            className="px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-700/80 hover:border-emerald-400/80 text-slate-200 hover:text-white transition-all active:scale-95 flex items-center gap-1.5"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span>East-Facing (Vastu Prime)</span>
+          </Link>
+          <Link
+            href="/plots"
+            className="px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-700/80 hover:border-yellow-400/80 text-slate-200 hover:text-white transition-all active:scale-95"
+          >
+            Corner Plots
+          </Link>
+        </div>
+
         {/* Key Highlights Strip */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-4xl mx-auto pt-6 text-left">
           <div className="bg-slate-900/80 backdrop-blur-md p-4 rounded-2xl border border-slate-800/80">

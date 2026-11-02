@@ -83,11 +83,19 @@ export default function PlotDetailModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-sm overflow-y-auto animate-fadeIn">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto"
+      onClick={onClose}
+    >
       <div
-        className="relative w-full max-w-4xl bg-slate-900 border border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden my-auto text-slate-100 max-h-[92vh] flex flex-col"
+        className="emil-spring-modal emil-drawer-responsive relative w-full max-w-4xl bg-slate-900 border border-slate-700/80 rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden my-auto text-slate-100 max-h-[92vh] flex flex-col"
         onClick={e => e.stopPropagation()}
       >
+        {/* Mobile Grab Bar / Drag Handle (Emil Kowalski / Vaul pattern) */}
+        <div className="sm:hidden pt-3 pb-1 flex justify-center bg-slate-950/80">
+          <div className="w-12 h-1.5 rounded-full bg-slate-600/80" />
+        </div>
+
         {/* Modal Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/80 sticky top-0 z-20">
           <div className="flex items-center gap-3">
