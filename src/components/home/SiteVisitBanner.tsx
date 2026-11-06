@@ -9,6 +9,7 @@ export default function SiteVisitBanner() {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [date, setDate] = useState('');
+  const [honeypot, setHoneypot] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
@@ -32,19 +33,23 @@ export default function SiteVisitBanner() {
     setSubmitting(true);
 
     try {
-      await submitLead({
+      const res = await submitLead({
         fullName: name,
         phone,
         email: '',
         preferredDate: date,
-        type: 'site_visit'
+        type: 'site_visit',
+        website_url_check: honeypot
       });
+
+      if (res.success) {
+        setSubmitted(true);
+        confetti({ particleCount: 70, spread: 70, origin: { y: 0.7 } });
+      }
     } catch (err) {
       console.error(err);
     } finally {
       setSubmitting(false);
-      setSubmitted(true);
-      confetti({ particleCount: 70, spread: 70, origin: { y: 0.7 } });
     }
   };
 
@@ -99,7 +104,19 @@ export default function SiteVisitBanner() {
                   </p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-3.5">
+                <form onSubmit={handleSubmit} className="space-y-3.5 relative">
+                  {/* Honeypot trap field (hidden from real users) */}
+                  <div className="absolute opacity-0 pointer-events-none -z-50 h-0 w-0 overflow-hidden" aria-hidden="true">
+                    <input
+                      type="text"
+                      name="website_url_check"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={honeypot}
+                      onChange={e => setHoneypot(e.target.value)}
+                    />
+                  </div>
+
                   <h3 className="text-base font-bold text-white tracking-tight">
                     Book Your On-Site Visit
                   </h3>

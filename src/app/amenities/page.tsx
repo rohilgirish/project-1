@@ -31,7 +31,7 @@ export default function AmenitiesPage() {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
-                DTCP & RERA Compliant Infrastructure
+                Grama Panchayat & DC Converted Infrastructure
               </span>
               <span className="text-xs text-slate-500">• Ready for Immediate Construction</span>
             </div>

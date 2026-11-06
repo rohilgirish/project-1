@@ -11,15 +11,28 @@ import { Heart, Menu, X, ChevronRight } from 'lucide-react';
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [lang, setLang] = useState<'en' | 'kn'>('en');
   const { count: shortlistCount } = useShortlist();
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
+    if (typeof window !== 'undefined') {
+      const savedLang = localStorage.getItem('anurag_lang') as 'en' | 'kn';
+      if (savedLang) setLang(savedLang);
+    }
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const toggleLanguage = () => {
+    const nextLang = lang === 'en' ? 'kn' : 'en';
+    setLang(nextLang);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('anurag_lang', nextLang);
+    }
+  };
 
   return (
     <header
@@ -29,6 +42,11 @@ export default function Navbar() {
           : 'bg-gradient-to-b from-slate-950/95 via-slate-950/70 to-transparent py-3'
       }`}
     >
+      {lang === 'kn' && (
+        <div className="bg-amber-500/10 border-b border-amber-500/20 py-1 px-4 text-center text-[11px] text-amber-300 font-medium">
+          ಅನುರಾಗ್ ಎನ್‌ಕ್ಲೇವ್: ಸಕ್ರಾಯಪಟ್ಟಣ, ಕಡೂರು ತಾಲ್ಲೂಕು, ಚಿಕ್ಕಮಗಳೂರು ಜಿಲ್ಲೆ • 39 ಪ್ರೀಮಿಯಂ ವಿಲ್ಲಾ ನಿವೇಶನಗಳು • ನೇರ ಸಹಾಯವಾಣಿ: +91 98860 12345
+        </div>
+      )}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="flex items-center justify-between gap-2 lg:gap-4 w-full">
           {/* Brand Logo with animated SVG */}
@@ -46,6 +64,15 @@ export default function Navbar() {
             {/* Social / Phone / WhatsApp Redirection */}
             <SocialRedirectButtons className="!p-1 !gap-1 !bg-slate-900/90 border-slate-800" />
 
+            {/* Language Toggle (Kannada / English) */}
+            <button
+              onClick={toggleLanguage}
+              className="px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-800 text-amber-400 hover:text-amber-300 text-xs font-bold transition-all shrink-0 cursor-pointer"
+              title={lang === 'en' ? 'ಕನ್ನಡಕ್ಕೆ ಬದಲಾಯಿಸಿ' : 'Switch to English'}
+            >
+              {lang === 'en' ? 'ಕನ್ನಡ' : 'ENG'}
+            </button>
+
             {/* Shortlist Heart Button */}
             <Link
               href="/shortlist"
@@ -60,18 +87,26 @@ export default function Navbar() {
               )}
             </Link>
 
-            {/* Book Site Visit CTA */}
+            {/* Book Site Visit CTA - Unified Champagne Bronze */}
             <Link
               href="/contact"
-              className="flex items-center gap-1.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-extrabold px-3.5 py-2 rounded-xl text-xs shadow-lg shadow-emerald-500/20 transition-all hover:scale-105 cursor-pointer whitespace-nowrap shrink-0"
+              className="flex items-center gap-1.5 bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-extrabold px-3.5 py-2 rounded-xl text-xs shadow-lg shadow-amber-500/20 transition-all hover:scale-105 cursor-pointer whitespace-nowrap shrink-0"
             >
               <span>Site Visit</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
-          {/* Mobile Menu Hamburger Trigger */}
-          <div className="flex items-center gap-2 lg:hidden">
+          {/* Mobile Menu Controls */}
+          <div className="flex items-center gap-1.5 lg:hidden">
+            <button
+              onClick={toggleLanguage}
+              className="px-2 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-amber-400 text-xs font-bold shrink-0 cursor-pointer"
+              title="Toggle Kannada / English"
+            >
+              {lang === 'en' ? 'ಕನ್ನಡ' : 'ENG'}
+            </button>
+
             <Link
               href="/shortlist"
               className="relative p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300"
@@ -97,7 +132,7 @@ export default function Navbar() {
 
       {/* Mobile Drawer Menu with Animated Menu List Buttons */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-slate-950/95 border-b border-slate-800 px-4 pt-4 pb-6 space-y-4 backdrop-blur-xl">
+        <div className="lg:hidden bg-slate-950/95 border-b border-slate-800 px-4 pt-4 pb-6 space-y-4 backdrop-blur-xl emil-spring-dropdown">
           <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 px-1">
             Navigation Menu
           </div>
@@ -114,7 +149,7 @@ export default function Navbar() {
             <Link
               href="/contact"
               onClick={() => setMobileMenuOpen(false)}
-              className="w-full flex items-center justify-center gap-2 bg-emerald-500 text-slate-950 font-bold py-3 rounded-xl text-sm shadow-lg shadow-emerald-500/20"
+              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-bold py-3 rounded-xl text-sm shadow-lg shadow-amber-500/20 active:scale-95 transition-all"
             >
               <span>Schedule an On-Site Visit</span>
               <ChevronRight className="w-4 h-4" />

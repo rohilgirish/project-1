@@ -38,7 +38,7 @@ export const PLOTS_DATA: Plot[] = [
       "/images/layout-plan.png"
     ],
     "pdfUrl": "/images/layout-plan.png",
-    "description": "RERA & Panchayat approved 30x40 residential villa plot in Anurag Enclave, Sakrayapatna, Kadur Taluk."
+    "description": "DC Converted & Grama Panchayat approved 30x40 residential villa plot in Anurag Enclave, Sakrayapatna, Kadur Taluk."
   },
   {
     "id": 2,
@@ -76,7 +76,7 @@ export const PLOTS_DATA: Plot[] = [
       "/images/layout-plan.png"
     ],
     "pdfUrl": "/images/layout-plan.png",
-    "description": "RERA & Panchayat approved 30x40 residential villa plot in Anurag Enclave, Sakrayapatna, Kadur Taluk."
+    "description": "DC Converted & Grama Panchayat approved 30x40 residential villa plot in Anurag Enclave, Sakrayapatna, Kadur Taluk."
   },
   {
     "id": 3,
@@ -114,7 +114,7 @@ export const PLOTS_DATA: Plot[] = [
       "/images/layout-plan.png"
     ],
     "pdfUrl": "/images/layout-plan.png",
-    "description": "RERA & Panchayat approved 30x40 residential villa plot in Anurag Enclave, Sakrayapatna, Kadur Taluk."
+    "description": "DC Converted & Grama Panchayat approved 30x40 residential villa plot in Anurag Enclave, Sakrayapatna, Kadur Taluk."
   },
   {
     "id": 4,
@@ -152,7 +152,7 @@ export const PLOTS_DATA: Plot[] = [
       "/images/layout-plan.png"
     ],
     "pdfUrl": "/images/layout-plan.png",
-    "description": "RERA & Panchayat approved 30x40 residential villa plot in Anurag Enclave, Sakrayapatna, Kadur Taluk."
+    "description": "DC Converted & Grama Panchayat approved 30x40 residential villa plot in Anurag Enclave, Sakrayapatna, Kadur Taluk."
   },
   {
     "id": 5,
@@ -191,7 +191,7 @@ export const PLOTS_DATA: Plot[] = [
       "/images/layout-plan.png"
     ],
     "pdfUrl": "/images/layout-plan.png",
-    "description": "RERA & Panchayat approved 30x40 residential villa plot in Anurag Enclave, Sakrayapatna, Kadur Taluk."
+    "description": "DC Converted & Grama Panchayat approved 30x40 residential villa plot in Anurag Enclave, Sakrayapatna, Kadur Taluk."
   },
   {
     "id": 6,

@@ -1114,7 +1114,7 @@ export default function Interactive3DLayout({ plots, selectedPlot, onSelectPlot,
             onClick={() => setShowRoadArrows(!showRoadArrows)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold backdrop-blur-md border shadow-lg transition-colors ${
               showRoadArrows
-                ? 'bg-sky-500 text-slate-950 font-bold border-sky-400'
+                ? 'bg-amber-400 text-slate-950 font-bold border-amber-300'
                 : 'bg-slate-900/90 text-slate-300 hover:text-white border-slate-800'
             }`}
             title="Toggle Road Direction Flow Arrows"

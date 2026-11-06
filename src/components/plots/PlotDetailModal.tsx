@@ -30,6 +30,7 @@ export default function PlotDetailModal({
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [honeypot, setHoneypot] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -48,24 +49,28 @@ export default function PlotDetailModal({
     setSubmitting(true);
 
     try {
-      await submitLead({
+      const res = await submitLead({
         fullName: formData.name,
         phone: formData.phone,
         email: formData.email,
         preferredDate: formData.visitDate,
         plotNumber: plot.number,
-        type: 'enquiry'
+        type: 'enquiry',
+        website_url_check: honeypot
       });
+
+      if (res.success) {
+        setFormSubmitted(true);
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
     } catch (err) {
       console.error(err);
     } finally {
       setSubmitting(false);
-      setFormSubmitted(true);
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
     }
   };
 
@@ -226,7 +231,7 @@ export default function PlotDetailModal({
 
                 <div className="bg-slate-900/90 p-3 rounded-xl border border-slate-800">
                   <div className="flex items-center gap-1.5 text-slate-400 text-xs mb-1">
-                    <Maximize2 className="w-3.5 h-3.5 text-sky-400" />
+                    <Maximize2 className="w-3.5 h-3.5 text-amber-400" />
                     <span>Total Area</span>
                   </div>
                   <div className="font-bold text-white text-sm">{plot.area.toLocaleString()} sq.ft</div>
@@ -244,11 +249,11 @@ export default function PlotDetailModal({
 
                 <div className="bg-slate-900/90 p-3 rounded-xl border border-slate-800">
                   <div className="flex items-center gap-1.5 text-slate-400 text-xs mb-1">
-                    <Shield className="w-3.5 h-3.5 text-purple-400" />
+                    <Shield className="w-3.5 h-3.5 text-amber-400" />
                     <span>Approvals</span>
                   </div>
-                  <div className="font-bold text-white text-sm">BDA / DTCP</div>
-                  <div className="text-[11px] text-emerald-400">RERA Approved</div>
+                  <div className="font-bold text-white text-sm">DTCP Sanctioned</div>
+                  <div className="text-[11px] text-emerald-400">Clear A-Khata Title</div>
                 </div>
               </div>
 
@@ -269,7 +274,7 @@ export default function PlotDetailModal({
                     onClick={() => onAddToCompare(plot)}
                     className={`w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border text-sm font-medium transition-all ${
                       isComparing
-                        ? 'bg-sky-500/20 border-sky-500 text-sky-300'
+                        ? 'bg-amber-500/15 border-amber-500/40 text-amber-300'
                         : 'bg-slate-900 hover:bg-slate-800 border-slate-700 text-slate-300'
                     }`}
                   >
@@ -379,7 +384,19 @@ export default function PlotDetailModal({
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 relative">
+                {/* Honeypot trap field (hidden from real users) */}
+                <div className="absolute opacity-0 pointer-events-none -z-50 h-0 w-0 overflow-hidden" aria-hidden="true">
+                  <input
+                    type="text"
+                    name="website_url_check"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={honeypot}
+                    onChange={e => setHoneypot(e.target.value)}
+                  />
+                </div>
+
                 <input
                   type="text"
                   required

@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { formatINR, formatNumberINR } from '@/lib/utils';
+import EMICalculator from '@/components/pricing/EMICalculator';
 import {
   Download, CheckCircle2, ArrowRight, ShieldCheck, FileText, Sparkles
 } from 'lucide-react';
@@ -130,7 +131,7 @@ export default function PricingPage() {
 
               <Link
                 href={`/plots?size=${tier.size.split(' ')[0]}`}
-                className="w-full py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/20 transition-all cursor-pointer"
+                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-amber-500/20 transition-all cursor-pointer active:scale-95 duration-150"
               >
                 <span>View Matching Available Plots</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -138,6 +139,9 @@ export default function PricingPage() {
             </div>
           ))}
         </div>
+
+        {/* Taste-133 Villa Plot Financing & EMI Affordability Suite */}
+        <EMICalculator />
 
         {/* Milestone Payment Schedule Table */}
         <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-4">
@@ -147,7 +151,7 @@ export default function PricingPage() {
               <p className="text-xs text-slate-400">Linked to legal verification, agreement, and registration</p>
             </div>
             <span className="text-xs font-semibold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
-              RERA Protected Escrow
+              Milestone-Based Escrow
             </span>
           </div>
 
@@ -207,7 +211,7 @@ export default function PricingPage() {
           <div className="flex flex-wrap items-center gap-3 w-full md:w-auto justify-center">
             <Link
               href="/contact"
-              className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-xs sm:text-sm shadow-lg shadow-emerald-500/20 transition-all hover:scale-105 flex items-center gap-2 cursor-pointer"
+              className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-bold text-xs sm:text-sm shadow-lg shadow-amber-500/20 transition-all active:scale-95 duration-150 flex items-center gap-2 cursor-pointer"
             >
               <span>Schedule On-Site Visit</span>
               <ArrowRight className="w-4 h-4" />

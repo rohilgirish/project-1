@@ -11,14 +11,14 @@ export default function AmenitiesShowcase() {
   const getIcon = (id: string) => {
     switch (id) {
       case 'roads': return <Compass className="w-5 h-5 text-amber-400" />;
-      case 'underground': return <Zap className="w-5 h-5 text-yellow-400" />;
-      case 'security': return <ShieldCheck className="w-5 h-5 text-emerald-400" />;
-      case 'water': return <Droplets className="w-5 h-5 text-sky-400" />;
+      case 'underground': return <Zap className="w-5 h-5 text-amber-400" />;
+      case 'security': return <ShieldCheck className="w-5 h-5 text-amber-400" />;
+      case 'water': return <Droplets className="w-5 h-5 text-emerald-400" />;
       case 'park': return <Trees className="w-5 h-5 text-emerald-400" />;
-      case 'clubhouse': return <Building2 className="w-5 h-5 text-purple-400" />;
-      case 'sports': return <Trophy className="w-5 h-5 text-orange-400" />;
-      case 'eco': return <Leaf className="w-5 h-5 text-teal-400" />;
-      default: return <ShieldCheck className="w-5 h-5 text-emerald-400" />;
+      case 'clubhouse': return <Building2 className="w-5 h-5 text-amber-400" />;
+      case 'sports': return <Trophy className="w-5 h-5 text-amber-400" />;
+      case 'eco': return <Leaf className="w-5 h-5 text-emerald-400" />;
+      default: return <ShieldCheck className="w-5 h-5 text-amber-400" />;
     }
   };
 

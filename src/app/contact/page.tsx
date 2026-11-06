@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { PROJECT_SPECS } from '@/data/landmarks';
 import { getWhatsAppLink } from '@/lib/utils';
 import {
@@ -18,6 +19,8 @@ export default function ContactPage() {
     plotSize: '30x40',
     notes: ''
   });
+  const [honeypot, setHoneypot] = useState('');
+  const [dpdpConsent, setDpdpConsent] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
@@ -27,20 +30,25 @@ export default function ContactPage() {
     setSubmitting(true);
 
     try {
-      await submitLead({
+      const res = await submitLead({
         fullName: formData.name,
         phone: formData.phone,
         email: formData.email,
         preferredDate: formData.visitDate,
         plotNumber: formData.plotSize,
-        type: 'site_visit'
+        type: 'site_visit',
+        dpdpConsent,
+        website_url_check: honeypot
       });
+
+      if (res.success) {
+        setSubmitted(true);
+        confetti({ particleCount: 70, spread: 70, origin: { y: 0.6 } });
+      }
     } catch (err) {
       console.error(err);
     } finally {
       setSubmitting(false);
-      setSubmitted(true);
-      confetti({ particleCount: 70, spread: 70, origin: { y: 0.6 } });
     }
   };
 
@@ -157,7 +165,19 @@ export default function ContactPage() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4 relative">
+                {/* Honeypot trap field (hidden from real humans) */}
+                <div className="absolute opacity-0 pointer-events-none -z-50 h-0 w-0 overflow-hidden" aria-hidden="true">
+                  <input
+                    type="text"
+                    name="website_url_check"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={honeypot}
+                    onChange={e => setHoneypot(e.target.value)}
+                  />
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-[11px] uppercase tracking-wider font-semibold text-slate-400 mb-1">
@@ -244,10 +264,23 @@ export default function ContactPage() {
                   />
                 </div>
 
+                <div className="flex items-start gap-2.5 pt-1">
+                  <input
+                    type="checkbox"
+                    id="dpdp-consent"
+                    checked={dpdpConsent}
+                    onChange={e => setDpdpConsent(e.target.checked)}
+                    className="mt-0.5 accent-amber-400 h-4 w-4 rounded cursor-pointer shrink-0"
+                  />
+                  <label htmlFor="dpdp-consent" className="text-[11px] text-slate-400 leading-tight cursor-pointer">
+                    I consent to receiving project documentation, layout plans, and appointment confirmations via WhatsApp / Phone under the Digital Personal Data Protection (DPDP) Act 2023. <Link href="/privacy" className="text-amber-400 hover:underline">Privacy Policy</Link>.
+                  </label>
+                </div>
+
                 <button
                   type="submit"
-                  disabled={submitting}
-                  className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-extrabold py-3.5 px-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-xl shadow-emerald-500/20 transition-all cursor-pointer"
+                  disabled={submitting || !dpdpConsent}
+                  className="w-full bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-extrabold py-3.5 px-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-xl shadow-amber-500/20 active:scale-95 transition-all duration-150 cursor-pointer disabled:opacity-50"
                 >
                   <span>{submitting ? 'Confirming Appointment...' : 'Confirm Site Visit Appointment'}</span>
                   <ArrowRight className="w-4 h-4" />

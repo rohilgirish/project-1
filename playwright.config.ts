@@ -8,7 +8,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'list',
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:3005',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
@@ -23,10 +23,14 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: true,
+    command: 'next start -p 3005',
+    url: 'http://localhost:3005',
+    reuseExistingServer: false,
     timeout: 120 * 1000,
+    env: {
+      ADMIN_PASSWORD: 'AnuragProdTest2026!',
+      ADMIN_SECRET_KEY: 'e83921048f02931bcdef0123456789abcdef0123456789abcdef0123456789ab',
+    },
   },
 });
 

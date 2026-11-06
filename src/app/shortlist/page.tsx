@@ -9,6 +9,7 @@ import PlotDetailModal from '@/components/plots/PlotDetailModal';
 import PlotCompareModal from '@/components/plots/PlotCompareModal';
 import { Plot } from '@/types';
 import { Heart, Share2, Trash2, ArrowRight, Compass, Scale, MessageSquare } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function ShortlistPage() {
   const { shortlist, isShortlisted, togglePlot, clearShortlist, count } = useShortlist();
@@ -25,20 +26,38 @@ export default function ShortlistPage() {
       navigator.share({ title: 'My Shortlisted Plots', text, url: window.location.href });
     } else {
       navigator.clipboard.writeText(`${text} - ${window.location.href}`);
-      alert('Shortlist share text copied to clipboard!');
+      toast.success('Shortlist Link Copied', {
+        description: 'Link copied to clipboard. Ready to share with family or your architect.',
+        duration: 3500,
+      });
     }
   };
 
   const handleToggleCompare = (plot: Plot) => {
     if (comparePlots.some(p => p.id === plot.id)) {
       setComparePlots(prev => prev.filter(p => p.id !== plot.id));
+      toast.info(`Removed ${plot.number} from comparison`);
     } else {
       if (comparePlots.length >= 3) {
-        alert('You can compare up to 3 plots at a time.');
+        toast.warning('Comparison Limit Reached', {
+          description: 'You can compare up to 3 plots at a time.',
+          duration: 3500,
+        });
         return;
       }
       setComparePlots(prev => [...prev, plot]);
+      toast.success(`Added ${plot.number} to Comparison`, {
+        description: `${plot.width}×${plot.depth} ft, ${plot.facing} facing.`,
+        duration: 3000,
+      });
     }
+  };
+
+  const handleClearShortlist = () => {
+    clearShortlist();
+    toast.info('Shortlist Cleared', {
+      description: 'All saved plots have been removed.',
+    });
   };
 
   return (
@@ -67,15 +86,15 @@ export default function ShortlistPage() {
             <div className="flex items-center gap-2.5">
               <button
                 onClick={handleShareShortlist}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs font-semibold text-slate-300 hover:text-white transition-colors"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs font-semibold text-slate-300 hover:text-white transition-all active:scale-95 duration-150 cursor-pointer"
               >
                 <Share2 className="w-3.5 h-3.5" />
                 <span>Share Shortlist</span>
               </button>
 
               <button
-                onClick={clearShortlist}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-500/10 border border-rose-500/20 text-xs font-semibold text-rose-400 hover:bg-rose-500/20 transition-colors"
+                onClick={handleClearShortlist}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-500/10 border border-rose-500/20 text-xs font-semibold text-rose-400 hover:bg-rose-500/20 transition-all active:scale-95 duration-150 cursor-pointer"
               >
                 <Trash2 className="w-3.5 h-3.5" />
                 <span>Clear All</span>

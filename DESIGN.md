@@ -88,6 +88,8 @@ The design language is **"Quiet Luxury & Verdant Heritage"** — blending the na
 | `Brand/EmblemLogo` | `src/components/ui/BrandLogo.tsx` | `#bd9f67` Gold filter + SVG |
 | `Cards/PlotCard` | `src/components/plots/PlotCard.tsx` | `bg-slate-900/85 border border-slate-800` |
 | `Modals/PlotDrawer` | `src/components/plots/PlotDetailModal.tsx` | `Vaul.Root` + origin-aware dialog |
+| `Modals/CompareDrawer` | `src/components/plots/PlotCompareModal.tsx` | `emil-spring-modal` + side-by-side grid |
+| `Finance/EMICalculator` | `src/components/pricing/EMICalculator.tsx` | `#bd9f67` Gold numbers + emerald progress |
 | `Hero/StatusPill` | `src/components/home/HeroSection.tsx` | `bg-emerald-500/10 border-emerald-500/30` |
 | `Navigation/Dock` | `src/components/layout/MenuListButtons.tsx` | Gliding icon micro-animation |
 
@@ -97,4 +99,48 @@ The design language is **"Quiet Luxury & Verdant Heritage"** — blending the na
 - Automated headless browser tests run across:
   1. **Desktop Chrome (1440×900)**: Visual hero balance, 3D Canvas, grid symmetry.
   2. **Mobile Safari / iPhone 14 (390×844)**: Bottom sticky bar, drawer gesture, touch targets ≥ 44×44px.
+  3. **Interactive E2E Flows**: EMI slider verification, plot compare modals, and zero console errors.
+
+---
+
+## 6. Security, Data Privacy & Zero-Trust Governance
+
+### Security Philosophy
+Anurag Enclave treats buyer data, phone numbers, and land inquiries with bank-grade privacy. Security must never be a clumsy after-thought or an ugly alert box — it is an integral dimension of high craft.
+
+### Zero-Trust & Data Hygiene Directives
+- **Zero Public SELECT Access**: In Supabase, the table `leads` has RLS enabled with `SELECT` revoked from the public `anon` role. Only server-side authenticated sessions can access customer records.
+- **Strict Input Sanitization**: All form inputs are sanitized on ingress. HTML tags, non-printable control characters, and CSV formula injection characters (`=`, `+`, `-`, `@`) are stripped or neutralized.
+- **Mobile Number Verification**: Client and server reject spoofed numbers with 10-digit Indian E.164 mobile regex (`^[6-9]\d{9}$`).
+- **Invisible Bot Traps (Honeypot)**: Silent decoy fields (`website_url_check`) trap automated scraping bots without imposing friction on human buyers.
+- **Sliding-Window Rate Limiting**: All API routes enforce IP-based rate limiting (5 POSTs per 10 minutes; 30 GETs per minute) returning `429 Too Many Requests` with dynamic retry headers.
+- **HTTP Security Headers**: Enforced across every route in `next.config.ts`:
+  - `X-Frame-Options: DENY` (Anti-Clickjacking)
+  - `X-Content-Type-Options: nosniff` (Anti-MIME sniffing)
+  - `Strict-Transport-Security: max-age=31536000; includeSubDomains; preload` (Enforced HTTPS)
+  - `Referrer-Policy: strict-origin-when-cross-origin` (Confidential query isolation)
+  - `Permissions-Policy: camera=(), microphone=(), geolocation=()` (Device API lockdown)
+  - `Content-Security-Policy`: Whitelisted script, style, and media boundaries.
+
+### Executive Admin Gate (Taste-133 & Emil Kowalski)
+- When visiting `/admin`, unauthorized visitors are met with a luxury frosted-glass security lockscreen (`bg-slate-900/90 border border-slate-800` with warm gold accents and specular highlights).
+- Incorrect PIN codes trigger a tactile spring error micro-shake (`animate-shake` powered by `cubic-bezier(0.16, 1, 0.3, 1)`).
+- Session tokens are stored in ephemeral `sessionStorage` (auto-terminated on tab close) with a one-click "Lock Desk" logout command.
+
+---
+
+## 7. The 3 Impeccable Design Audit Lenses
+
+When reviewing or building new components for Anurag Enclave, apply these 3 continuous audit lenses:
+
+1. **`polish` (Alignment & Contrast)**:
+   - Ensure all touch targets on mobile are at least 44×44px.
+   - Align all numerical metrics with tabular figures (`font-mono`) to prevent layout jitter when numbers change.
+   - Guarantee WCAG AA color contrast (minimum 4.5:1 ratio) on every label.
+2. **`bolder` (High-Impact Proof Points)**:
+   - Never bury key selling points in fine print: prominently highlight the DTCP approval status, ₹15.6L launch rate, and 48m botanical buffer.
+   - Use warm architectural gold (`#bd9f67`) and emerald (`#10b981`) for high-value transactional buttons.
+3. **`distill` (Eliminate Clutter)**:
+   - Remove redundant iconography and placeholder badges.
+   - Keep forms under 4 essential fields (Full Name, Phone Number, Preferred Date, Plot Preference).
 

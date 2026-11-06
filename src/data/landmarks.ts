@@ -67,13 +67,24 @@ export const LANDMARKS_DATA: Landmark[] = [
   }
 ];
 
+export const LEGAL_DOCUMENTATION = {
+  conversionStatus: 'Land Conversion for Residential Purpose (Sec 95, Karnataka Land Revenue Act)',
+  conversionOrderRef: 'DC Conversion Order, Chikkamagaluru District [Insert Order No. & Date from deed]',
+  approvalAuthority: 'Local Planning Authority & Sakrayapatna Grama Panchayat Layout Plan',
+  titleStatus: 'Freehold Title with Kadur Sub-Registrar Search Report',
+  reraComplianceNotice: 'Karnataka Real Estate Regulatory Authority (K-RERA): Plotted developments exceeding statutory thresholds are subject to statutory compliance under RERA Act 2016. Verify registration and sanction filings at the site office prior to entering into contracts.',
+  disclaimer: 'All layout dimensions, zoning approvals, and statutory documentation are subject to independent legal scrutiny against original certified copies available at the site office.'
+};
+
 export const PROJECT_SPECS = {
   name: 'ANURAG ENCLAVE',
   tagline: 'Signature Plotted Gated Community in Sakrayapatna, Chikkamagaluru',
   location: 'Sakrayapatna Village, Kadur Taluk, Chikkamagaluru District, Karnataka',
-  surveyNumber: 'Sakrayapatna, Chikkamagaluru',
+  surveyNumber: 'Sakrayapatna, Kadur Taluk, Chikkamagaluru',
   highwayAccess: 'Chikkamagaluru - Kadur State Highway (SH-57)',
-  dtcpApproval: 'Gram Panchayat & DTCP Sanctioned Plotted Layout',
+  approvalAuthority: 'Residential Conversion & Grama Panchayat Jurisdiction (Subject to Legal Verification)',
+  legalTitle: 'Freehold Title with Kadur Sub-Registrar Encumbrance Search Report',
+  reraStatus: 'Statutory Real Estate Regulatory Compliance Under Legal Filing',
   totalAcres: 2.0,
   totalPlots: 39,
   availablePlots: 22,
@@ -85,7 +96,7 @@ export const PROJECT_SPECS = {
   developer: 'ANURAGH FOUNDATION',
   phone: '+91 98860 12345',
   whatsapp: '919886012345',
-  email: 'info@anuraghfoundation.com',
+  email: 'sales@anuragenclave.com',
   officeAddress: 'Anurag Enclave Site Office, Sakrayapatna, Kadur Taluk, Chikkamagaluru 577135',
   googleMapsUrl: 'https://www.google.com/maps?q=13.431995391845703,75.91728210449219&z=17&hl=en'
 };

@@ -20,12 +20,12 @@ export default function LocationPage() {
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'Transit': return <Train className="w-4 h-4 text-sky-400" />;
+      case 'Transit': return <Train className="w-4 h-4 text-amber-400" />;
       case 'Education': return <GraduationCap className="w-4 h-4 text-amber-400" />;
-      case 'Healthcare': return <Cross className="w-4 h-4 text-rose-400" />;
-      case 'Tech Parks': return <Briefcase className="w-4 h-4 text-purple-400" />;
+      case 'Healthcare': return <Cross className="w-4 h-4 text-emerald-400" />;
+      case 'Tech Parks': return <Briefcase className="w-4 h-4 text-amber-400" />;
       case 'Shopping': return <ShoppingBag className="w-4 h-4 text-emerald-400" />;
-      default: return <MapPin className="w-4 h-4 text-emerald-400" />;
+      default: return <MapPin className="w-4 h-4 text-amber-400" />;
     }
   };
 

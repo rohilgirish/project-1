@@ -48,6 +48,8 @@ export interface Landmark {
   lng?: number;
 }
 
+export type LeadStatus = 'new' | 'contacted' | 'site_visit' | 'negotiation' | 'closed';
+
 export interface Lead {
   id: string;
   fullName: string;
@@ -56,7 +58,13 @@ export interface Lead {
   preferredDate?: string;
   plotNumber?: string;
   budget?: string;
-  type: 'site_visit' | 'brochure' | 'enquiry' | 'exit_intent';
+  type: 'site_visit' | 'brochure' | 'enquiry' | 'exit_intent' | string;
+  status?: LeadStatus;
+  notes?: string;
+  utmSource?: string;
+  inquiryCount?: number;
+  followUpDate?: string;
+  dpdpConsent?: boolean;
   createdAt: string;
 }
 

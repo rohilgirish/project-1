@@ -18,7 +18,7 @@ export default function PlotCompareModal({ comparePlots, onRemove, onClose, onSe
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto">
       <div
-        className="relative w-full max-w-5xl bg-slate-900 border border-slate-700 rounded-3xl shadow-2xl overflow-hidden my-auto text-slate-100 flex flex-col max-h-[90vh]"
+        className="relative w-full max-w-5xl bg-slate-900 border border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden my-auto text-slate-100 flex flex-col max-h-[90vh] emil-spring-modal"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
@@ -29,7 +29,7 @@ export default function PlotCompareModal({ comparePlots, onRemove, onClose, onSe
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-all active:scale-90 duration-150 cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>

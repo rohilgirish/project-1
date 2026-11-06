@@ -9,6 +9,7 @@ export default function ExitIntentPopup() {
   const [isOpen, setIsOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [honeypot, setHoneypot] = useState('');
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
 
@@ -33,18 +34,22 @@ export default function ExitIntentPopup() {
     setSubmitting(true);
 
     try {
-      await submitLead({
+      const res = await submitLead({
         fullName: name,
         phone,
         email: '',
-        type: 'exit_intent'
+        type: 'exit_intent',
+        website_url_check: honeypot
       });
+
+      if (res.success) {
+        setSubmitted(true);
+        confetti({ particleCount: 60, spread: 60, origin: { y: 0.5 } });
+      }
     } catch (err) {
       console.error(err);
     } finally {
       setSubmitting(false);
-      setSubmitted(true);
-      confetti({ particleCount: 60, spread: 60, origin: { y: 0.5 } });
     }
   };
 
@@ -98,7 +103,19 @@ export default function ExitIntentPopup() {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-3 pt-2">
+            <form onSubmit={handleSubmit} className="space-y-3 pt-2 relative">
+              {/* Honeypot trap field (hidden from real users) */}
+              <div className="absolute opacity-0 pointer-events-none -z-50 h-0 w-0 overflow-hidden" aria-hidden="true">
+                <input
+                  type="text"
+                  name="website_url_check"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={honeypot}
+                  onChange={e => setHoneypot(e.target.value)}
+                />
+              </div>
+
               <input
                 type="text"
                 required

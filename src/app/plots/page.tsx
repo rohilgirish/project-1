@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import { PLOTS_DATA } from '@/data/plots';
 import { Plot, FilterState } from '@/types';
-import Interactive3DLayout from '@/components/plots/Interactive3DLayout';
 import PlotFilters from '@/components/plots/PlotFilters';
 import PlotDetailModal from '@/components/plots/PlotDetailModal';
 import PlotCard from '@/components/plots/PlotCard';
@@ -13,6 +13,22 @@ import { useShortlist } from '@/lib/useShortlist';
 import {
   Layers, Grid3X3, ArrowUpDown, Sparkles, SlidersHorizontal, Scale, Download, Search
 } from 'lucide-react';
+
+const Interactive3DLayout = dynamic(
+  () => import('@/components/plots/Interactive3DLayout'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-[450px] lg:h-[550px] w-full rounded-3xl bg-slate-950 border border-slate-800 flex flex-col items-center justify-center gap-3 p-6 text-center">
+        <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 animate-pulse">
+          <Layers className="w-6 h-6" />
+        </div>
+        <div className="text-sm font-bold text-white">Loading Masterplan View...</div>
+        <div className="text-xs text-slate-400">Rendering 39 villa plots on 2.0-acre site canvas</div>
+      </div>
+    ),
+  }
+);
 
 export default function PlotExplorerPage() {
   const [selectedPlot, setSelectedPlot] = useState<Plot | null>(null);

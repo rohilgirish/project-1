@@ -4,6 +4,7 @@ import React from 'react';
 import { Plot } from '@/types';
 import { formatINR, formatNumberINR, getStatusColor, getWhatsAppLink } from '@/lib/utils';
 import { Heart, Compass, Ruler, Maximize2, MessageSquare, ArrowRight } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface Props {
   plot: Plot;
@@ -28,7 +29,7 @@ export default function PlotCard({
   return (
     <div
       onClick={() => onSelect(plot)}
-      className="group relative bg-slate-900/90 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-200 active:scale-[0.99] flex flex-col cursor-pointer"
+      className="group relative bg-slate-900/90 hover:bg-slate-900 border border-slate-800/80 hover:border-amber-500/40 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-amber-500/5 transition-all duration-200 active:scale-[0.99] flex flex-col cursor-pointer"
     >
       {/* Card Image Thumbnail */}
       <div className="relative aspect-video w-full overflow-hidden bg-slate-950">
@@ -48,20 +49,28 @@ export default function PlotCard({
           </span>
         </div>
 
-        {/* Shortlist Heart Button */}
+        {/* Shortlist Heart Button (Emil Kowalski tactile feedback) */}
         <button
           onClick={e => {
             e.stopPropagation();
             onToggleShortlist(plot.id);
+            if (!isShortlisted) {
+              toast.success(`Saved ${plot.number} to Shortlist`, {
+                description: `${plot.width}×${plot.depth} ft (${plot.area} sq.ft), ${plot.facing} facing.`,
+                duration: 2500,
+              });
+            } else {
+              toast.info(`Removed ${plot.number} from Shortlist`);
+            }
           }}
-          className={`absolute top-3 right-3 p-2 rounded-xl backdrop-blur-md transition-all ${
+          className={`absolute top-3 right-3 p-2 rounded-xl backdrop-blur-md transition-all active:scale-75 duration-150 cursor-pointer ${
             isShortlisted
-              ? 'bg-rose-500/30 text-rose-400 border border-rose-500/50'
-              : 'bg-black/40 text-slate-300 hover:text-white border border-white/10'
+              ? 'bg-rose-500/30 text-rose-400 border border-rose-500/50 shadow-md shadow-rose-500/20'
+              : 'bg-black/50 text-slate-300 hover:text-white border border-white/10 hover:border-white/30'
           }`}
           title={isShortlisted ? 'Remove from Shortlist' : 'Save Plot'}
         >
-          <Heart className={`w-3.5 h-3.5 ${isShortlisted ? 'fill-rose-500' : ''}`} />
+          <Heart className={`w-3.5 h-3.5 transition-transform ${isShortlisted ? 'fill-rose-500 scale-110' : ''}`} />
         </button>
 
         {/* Plot Number Overlay */}
