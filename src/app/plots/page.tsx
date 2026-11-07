@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, Suspense } from 'react';
 import dynamic from 'next/dynamic';
+import { useSearchParams } from 'next/navigation';
 import { PLOTS_DATA } from '@/data/plots';
 import { Plot, FilterState } from '@/types';
 import PlotFilters from '@/components/plots/PlotFilters';
@@ -9,6 +10,7 @@ import PlotDetailModal from '@/components/plots/PlotDetailModal';
 import PlotCard from '@/components/plots/PlotCard';
 import PlotCompareModal from '@/components/plots/PlotCompareModal';
 import SearchPlotLoader from '@/components/ui/SearchPlotLoader';
+import BrochureModal from '@/components/ui/BrochureModal';
 import { useShortlist } from '@/lib/useShortlist';
 import {
   Layers, Grid3X3, ArrowUpDown, Sparkles, SlidersHorizontal, Scale, Download, Search
@@ -30,14 +32,26 @@ const Interactive3DLayout = dynamic(
   }
 );
 
-export default function PlotExplorerPage() {
+function PlotExplorerContent() {
+  const searchParams = useSearchParams();
+  const sizeParam = searchParams.get('size');
+
   const [selectedPlot, setSelectedPlot] = useState<Plot | null>(null);
   const [viewMode, setViewMode] = useState<'3d' | 'grid'>('3d');
   const [comparePlots, setComparePlots] = useState<Plot[]>([]);
   const [showCompareModal, setShowCompareModal] = useState(false);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [isBrochureOpen, setIsBrochureOpen] = useState(false);
+  const [sortBy, setSortBy] = useState<'number' | 'price-asc' | 'price-desc' | 'area-asc'>('number');
 
   const { isShortlisted, togglePlot } = useShortlist();
+
+  // On mobile screens, default view mode to 'grid' for optimal performance
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setViewMode('grid');
+    }
+  }, []);
 
   const initialFilters: FilterState = {
     search: '',
@@ -53,9 +67,20 @@ export default function PlotExplorerPage() {
 
   const [filters, setFilters] = useState<FilterState>(initialFilters);
 
-  // Filtered plots
+  // Sync size query param if provided in URL (e.g. /plots?size=30x40)
+  useEffect(() => {
+    if (sizeParam) {
+      const normalized = sizeParam.replace('×', 'x').toLowerCase();
+      setFilters(prev => ({
+        ...prev,
+        size: normalized.includes('30') ? '30x40' : prev.size
+      }));
+    }
+  }, [sizeParam]);
+
+  // Filtered and sorted plots
   const filteredPlots = useMemo(() => {
-    return PLOTS_DATA.filter(p => {
+    const list = PLOTS_DATA.filter(p => {
       if (filters.search) {
         const q = filters.search.toLowerCase();
         if (!p.number.toLowerCase().includes(q) && !p.size.toLowerCase().includes(q)) return false;
@@ -69,7 +94,15 @@ export default function PlotExplorerPage() {
       if (p.price < filters.minPrice || p.price > filters.maxPrice) return false;
       return true;
     });
-  }, [filters]);
+
+    // Apply sorting
+    return list.sort((a, b) => {
+      if (sortBy === 'price-asc') return a.price - b.price;
+      if (sortBy === 'price-desc') return b.price - a.price;
+      if (sortBy === 'area-asc') return a.area - b.area;
+      return a.id - b.id; // default: plot number
+    });
+  }, [filters, sortBy]);
 
   // Compare handlers
   const handleToggleCompare = (plot: Plot) => {
@@ -125,14 +158,14 @@ export default function PlotExplorerPage() {
           </div>
         </div>
 
-        {/* View Switcher & Action Toolbar */}
+        {/* View Switcher, Sort & Action Toolbar */}
         <div className="flex flex-wrap items-center justify-between gap-3 py-4">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {/* View Mode Switcher */}
             <div className="flex bg-slate-900 p-1 rounded-xl border border-slate-800">
               <button
                 onClick={() => setViewMode('3d')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                   viewMode === '3d'
                     ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20'
                     : 'text-slate-400 hover:text-white'
@@ -144,7 +177,7 @@ export default function PlotExplorerPage() {
 
               <button
                 onClick={() => setViewMode('grid')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                   viewMode === 'grid'
                     ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20'
                     : 'text-slate-400 hover:text-white'
@@ -155,36 +188,51 @@ export default function PlotExplorerPage() {
               </button>
             </div>
 
+            {/* Sort Dropdown */}
+            <div className="flex items-center gap-1.5 bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-slate-300">
+              <ArrowUpDown className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <select
+                value={sortBy}
+                onChange={e => setSortBy(e.target.value as typeof sortBy)}
+                className="bg-transparent text-xs text-white focus:outline-none cursor-pointer"
+              >
+                <option value="number" className="bg-slate-900 text-white">Plot # (1 to 39)</option>
+                <option value="price-asc" className="bg-slate-900 text-white">Price: Low to High</option>
+                <option value="price-desc" className="bg-slate-900 text-white">Price: High to Low</option>
+                <option value="area-asc" className="bg-slate-900 text-white">Area: Low to High</option>
+              </select>
+            </div>
+
             {/* Mobile Filter Trigger */}
             <button
               onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
-              className="lg:hidden flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs font-medium text-slate-200"
+              className="lg:hidden flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs font-medium text-slate-200 cursor-pointer"
             >
               <SlidersHorizontal className="w-3.5 h-3.5 text-emerald-400" />
               <span>Filters</span>
             </button>
           </div>
 
-          {/* Compare bar pill */}
+          {/* Compare bar pill & Gated Download */}
           <div className="flex items-center gap-2">
             {comparePlots.length > 0 && (
               <button
                 onClick={() => setShowCompareModal(true)}
-                className="flex items-center gap-2 bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-4 py-1.5 rounded-xl text-xs shadow-lg shadow-sky-500/20 transition-all animate-bounce"
+                className="flex items-center gap-2 bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold px-4 py-1.5 rounded-xl text-xs shadow-lg shadow-sky-500/20 transition-all animate-bounce cursor-pointer"
               >
                 <Scale className="w-4 h-4" />
                 <span>Compare ({comparePlots.length}/3 Plots)</span>
               </button>
             )}
 
-            <a
-              href="/images/layout-plan.png"
-              download="anurag-enclave-masterplan.png"
-              className="flex items-center gap-1.5 text-xs text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-800 px-3 py-2 rounded-xl transition-colors"
+            <button
+              type="button"
+              onClick={() => setIsBrochureOpen(true)}
+              className="flex items-center gap-1.5 text-xs text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-800 px-3 py-2 rounded-xl transition-colors cursor-pointer"
             >
               <Download className="w-3.5 h-3.5 text-emerald-400" />
               <span className="hidden sm:inline">Download CAD Masterplan</span>
-            </a>
+            </button>
           </div>
         </div>
 
@@ -262,7 +310,7 @@ export default function PlotExplorerPage() {
                   </span>
                   <div className="flex items-center gap-2 text-xs text-slate-400">
                     <ArrowUpDown className="w-3.5 h-3.5" />
-                    <span>Sorted by Plot ID</span>
+                    <span>Sorted by {sortBy === 'number' ? 'Plot #' : sortBy.replace('-', ' ')}</span>
                   </div>
                 </div>
 
@@ -323,6 +371,24 @@ export default function PlotExplorerPage() {
           }}
         />
       )}
+
+      {/* Gated Brochure Modal */}
+      <BrochureModal
+        isOpen={isBrochureOpen}
+        onClose={() => setIsBrochureOpen(false)}
+      />
     </div>
+  );
+}
+
+export default function PlotExplorerPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white text-sm">
+        Loading Plots Catalog...
+      </div>
+    }>
+      <PlotExplorerContent />
+    </Suspense>
   );
 }

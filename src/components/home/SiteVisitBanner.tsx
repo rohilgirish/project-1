@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Calendar, Phone, CheckCircle2, ArrowRight, ShieldCheck, Car, Compass, MapPin } from 'lucide-react';
+import Link from 'next/link';
+import { Calendar, Phone, CheckCircle2, ArrowRight, ShieldCheck, Car, Compass, MapPin, AlertCircle, MessageCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { submitLead } from '@/lib/leads';
 
@@ -9,9 +10,11 @@ export default function SiteVisitBanner() {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [date, setDate] = useState('');
+  const [dpdpConsent, setDpdpConsent] = useState(false);
   const [honeypot, setHoneypot] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState('');
 
   const getUpcomingDate = (targetDay: number, weeksAhead = 0) => {
     const now = new Date();
@@ -29,7 +32,18 @@ export default function SiteVisitBanner() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !phone) return;
+    setFormError('');
+
+    if (!name || !phone) {
+      setFormError('Please enter your full name and 10-digit mobile number.');
+      return;
+    }
+
+    if (!dpdpConsent) {
+      setFormError('Please consent to contact per the DPDP Act 2023 to schedule your visit.');
+      return;
+    }
+
     setSubmitting(true);
 
     try {
@@ -39,15 +53,18 @@ export default function SiteVisitBanner() {
         email: '',
         preferredDate: date,
         type: 'site_visit',
+        dpdpConsent: true,
         website_url_check: honeypot
       });
 
       if (res.success) {
         setSubmitted(true);
         confetti({ particleCount: 70, spread: 70, origin: { y: 0.7 } });
+      } else {
+        setFormError(res.error || 'Unable to record your visit request. Please reach us directly on WhatsApp.');
       }
-    } catch (err) {
-      console.error(err);
+    } catch (err: unknown) {
+      setFormError(err instanceof Error ? err.message : 'Network error. Please reach us on WhatsApp.');
     } finally {
       setSubmitting(false);
     }
@@ -203,6 +220,46 @@ export default function SiteVisitBanner() {
                       className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
                     />
                   </div>
+
+                  {/* DPDP Act 2023 Statutory Consent Checkbox (Unticked by default) */}
+                  <div className="pt-1">
+                    <label className="flex items-start gap-2.5 cursor-pointer text-left">
+                      <input
+                        type="checkbox"
+                        checked={dpdpConsent}
+                        onChange={e => {
+                          setDpdpConsent(e.target.checked);
+                          if (e.target.checked) setFormError('');
+                        }}
+                        className="mt-0.5 w-4 h-4 rounded border-slate-700 bg-slate-900 text-emerald-500 focus:ring-emerald-500/20 focus:ring-offset-0 cursor-pointer shrink-0"
+                      />
+                      <span className="text-[11px] text-slate-400 leading-snug">
+                        I consent to receive site visit details, CAD layout plan, and project updates via Phone/WhatsApp per the{' '}
+                        <Link href="/privacy" target="_blank" className="text-emerald-400 underline hover:text-emerald-300">
+                          DPDP Act 2023 Policy
+                        </Link>.
+                      </span>
+                    </label>
+                  </div>
+
+                  {/* Error Display */}
+                  {formError && (
+                    <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs space-y-1.5 text-left">
+                      <div className="flex items-center gap-1.5 font-semibold">
+                        <AlertCircle className="w-3.5 h-3.5 shrink-0 text-rose-400" />
+                        <span>{formError}</span>
+                      </div>
+                      <a
+                        href="https://wa.me/919886012345?text=Hello%20Anuragh%20Foundation,%20I%20would%20like%20to%20schedule%20a%20site%20visit%20at%20Anurag%20Enclave."
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 text-[11px] text-emerald-400 font-bold hover:underline"
+                      >
+                        <MessageCircle className="w-3.5 h-3.5" />
+                        <span>Chat Directly on WhatsApp (+91 98860 12345)</span>
+                      </a>
+                    </div>
+                  )}
 
                   <button
                     type="submit"

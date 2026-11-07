@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { X, Download, FileText, CheckCircle2, ShieldCheck, Sparkles } from 'lucide-react';
+import Link from 'next/link';
+import { X, Download, FileText, CheckCircle2, AlertCircle, MessageCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { submitLead } from '@/lib/leads';
 
@@ -12,15 +13,18 @@ export default function ExitIntentPopup() {
   const [honeypot, setHoneypot] = useState('');
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
+  const [dpdpConsent, setDpdpConsent] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [downloadUrl, setDownloadUrl] = useState('');
 
   useEffect(() => {
     // Check if previously dismissed in this session
-    if (sessionStorage.getItem('horizon_exit_dismissed')) return;
+    if (sessionStorage.getItem('anurag_exit_dismissed')) return;
 
     const handleMouseLeave = (e: MouseEvent) => {
       if (e.clientY <= 10) {
         setIsOpen(true);
-        sessionStorage.setItem('horizon_exit_dismissed', 'true');
+        sessionStorage.setItem('anurag_exit_dismissed', 'true');
       }
     };
 
@@ -30,24 +34,51 @@ export default function ExitIntentPopup() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !phone) return;
+    setErrorMessage('');
+
+    if (!name.trim() || !phone.trim()) {
+      setErrorMessage('Please provide your name and phone number.');
+      return;
+    }
+
+    if (!dpdpConsent) {
+      setErrorMessage('Please acknowledge the DPDP consent to receive the masterplan.');
+      return;
+    }
+
     setSubmitting(true);
 
     try {
       const res = await submitLead({
-        fullName: name,
-        phone,
+        fullName: name.trim(),
+        phone: phone.trim(),
         email: '',
-        type: 'exit_intent',
+        type: 'blueprint_download',
+        dpdpConsent: true,
         website_url_check: honeypot
       });
 
       if (res.success) {
         setSubmitted(true);
         confetti({ particleCount: 60, spread: 60, origin: { y: 0.5 } });
+
+        const authorizedUrl = res.downloadToken
+          ? `/api/brochure/download?token=${encodeURIComponent(res.downloadToken)}`
+          : '/api/brochure/download';
+        setDownloadUrl(authorizedUrl);
+
+        // Auto trigger download with authenticated token
+        const link = document.createElement('a');
+        link.href = authorizedUrl;
+        link.download = 'Anurag-Enclave-Masterplan-CAD.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        setErrorMessage(res.error || 'Failed to authorize download. Please try again or message WhatsApp.');
       }
-    } catch (err) {
-      console.error(err);
+    } catch (err: unknown) {
+      setErrorMessage(err instanceof Error ? err.message : 'Network sync error. Please message our sales desk on WhatsApp.');
     } finally {
       setSubmitting(false);
     }
@@ -134,17 +165,57 @@ export default function ExitIntentPopup() {
                 className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500"
               />
 
+              {/* DPDP Act 2023 Explicit Opt-in Checkbox (Unticked by default) */}
+              <div className="pt-1">
+                <label className="flex items-start gap-2.5 cursor-pointer text-left">
+                  <input
+                    type="checkbox"
+                    checked={dpdpConsent}
+                    onChange={e => {
+                      setDpdpConsent(e.target.checked);
+                      if (e.target.checked) setErrorMessage('');
+                    }}
+                    className="mt-0.5 w-4 h-4 rounded border-slate-700 bg-slate-950 text-emerald-500 focus:ring-emerald-500/20 focus:ring-offset-0 cursor-pointer shrink-0"
+                  />
+                  <span className="text-[11px] text-slate-400 leading-snug">
+                    I consent to receive the CAD layout plan and plot pricing via Phone/WhatsApp per the{' '}
+                    <Link href="/privacy" target="_blank" className="text-emerald-400 underline hover:text-emerald-300">
+                      DPDP Act 2023 Policy
+                    </Link>.
+                  </span>
+                </label>
+              </div>
+
+              {/* Error Display */}
+              {errorMessage && (
+                <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs space-y-1.5 text-left">
+                  <div className="flex items-center gap-1.5 font-semibold">
+                    <AlertCircle className="w-3.5 h-3.5 shrink-0 text-rose-400" />
+                    <span>{errorMessage}</span>
+                  </div>
+                  <a
+                    href="https://wa.me/919886012345?text=Hello%20Anuragh%20Foundation,%20please%20send%20me%20the%20Anurag%20Enclave%20masterplan%20CAD%20blueprint."
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[11px] text-emerald-400 font-bold hover:underline"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    <span>Get Plan Directly via WhatsApp (+91 98860 12345)</span>
+                  </a>
+                </div>
+              )}
+
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3.5 px-4 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xl shadow-emerald-500/20 transition-all cursor-pointer"
+                className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3.5 px-4 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xl shadow-emerald-500/20 transition-all cursor-pointer disabled:opacity-50"
               >
                 <Download className="w-4 h-4" />
-                <span>{submitting ? 'Preparing Plan...' : 'Download Free CAD Plan & Price List'}</span>
+                <span>{submitting ? 'Generating 15-Min Access Pass...' : 'Download Free CAD Plan & Price List'}</span>
               </button>
 
               <p className="text-[10px] text-slate-500 text-center">
-                🔒 Zero spam guarantee. We respect your privacy.
+                🔒 Zero spam guarantee. We respect your statutory privacy.
               </p>
             </form>
           </div>
@@ -155,17 +226,19 @@ export default function ExitIntentPopup() {
             </div>
             <h4 className="text-xl font-bold text-white">Your Masterplan is Ready!</h4>
             <p className="text-xs text-slate-300 max-w-sm mx-auto leading-relaxed">
-              We have dispatched the masterplan and price breakdown to your phone number. You can also download the CAD blueprint directly below.
+              We have generated your authorized 15-minute download token. If the download did not start automatically, click below.
             </p>
-            <a
-              href="/images/layout-plan.png"
-              download="anurag-enclave-masterplan.png"
-              onClick={() => setIsOpen(false)}
-              className="inline-flex items-center gap-2 bg-emerald-500 text-slate-950 font-bold py-3 px-6 rounded-xl text-xs shadow-lg shadow-emerald-500/20"
-            >
-              <Download className="w-4 h-4" />
-              <span>Download CAD Blueprint Directly</span>
-            </a>
+            {downloadUrl && (
+              <a
+                href={downloadUrl}
+                download="Anurag-Enclave-Masterplan-CAD.png"
+                onClick={() => setIsOpen(false)}
+                className="inline-flex items-center gap-2 bg-emerald-500 text-slate-950 font-bold py-3 px-6 rounded-xl text-xs shadow-lg shadow-emerald-500/20"
+              >
+                <Download className="w-4 h-4" />
+                <span>Download CAD Blueprint</span>
+              </a>
+            )}
           </div>
         )}
       </div>

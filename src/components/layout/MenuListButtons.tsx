@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Layers, MapPin, Trees, Calculator, Heart } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface Props {
   className?: string;
@@ -17,30 +18,31 @@ export default function MenuListButtons({
   direction = 'row'
 }: Props) {
   const pathname = usePathname();
+  const { t } = useLanguage();
 
   const menuItems = [
     {
-      name: 'Overview',
+      name: t('nav.home'),
       href: '/',
       icon: <Home className="w-4 h-4" />
     },
     {
-      name: '3D Explorer',
+      name: t('nav.plots'),
       href: '/plots',
       icon: <Layers className="w-4 h-4" />
     },
     {
-      name: 'Location',
+      name: t('nav.location'),
       href: '/location',
       icon: <MapPin className="w-4 h-4" />
     },
     {
-      name: 'Amenities',
+      name: t('nav.amenities'),
       href: '/amenities',
       icon: <Trees className="w-4 h-4" />
     },
     {
-      name: 'Pricing',
+      name: t('nav.pricing'),
       href: '/pricing',
       icon: <Calculator className="w-4 h-4" />
     }

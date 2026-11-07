@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useShortlist } from '@/lib/useShortlist';
+import { useLanguage } from '@/context/LanguageContext';
 import BrandLogo from '@/components/ui/BrandLogo';
 import SocialRedirectButtons from '@/components/ui/SocialRedirectButtons';
 import MenuListButtons from '@/components/layout/MenuListButtons';
@@ -11,28 +12,16 @@ import { Heart, Menu, X, ChevronRight } from 'lucide-react';
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [lang, setLang] = useState<'en' | 'kn'>('en');
+  const { lang, toggleLanguage, t } = useLanguage();
   const { count: shortlistCount } = useShortlist();
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-    if (typeof window !== 'undefined') {
-      const savedLang = localStorage.getItem('anurag_lang') as 'en' | 'kn';
-      if (savedLang) setLang(savedLang);
-    }
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const toggleLanguage = () => {
-    const nextLang = lang === 'en' ? 'kn' : 'en';
-    setLang(nextLang);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('anurag_lang', nextLang);
-    }
-  };
 
   return (
     <header
@@ -92,7 +81,7 @@ export default function Navbar() {
               href="/contact"
               className="flex items-center gap-1.5 bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-extrabold px-3.5 py-2 rounded-xl text-xs shadow-lg shadow-amber-500/20 transition-all hover:scale-105 cursor-pointer whitespace-nowrap shrink-0"
             >
-              <span>Site Visit</span>
+              <span>{t('nav.siteVisit')}</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </Link>
           </div>

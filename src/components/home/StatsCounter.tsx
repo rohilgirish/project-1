@@ -4,8 +4,11 @@ import React from 'react';
 import Link from 'next/link';
 import { TrendingUp, ArrowRight, ShieldCheck, MapPin } from 'lucide-react';
 import StatusOverviewCards from '@/components/ui/StatusOverviewCards';
+import { getPlotCounts } from '@/data/plots';
 
 export default function StatsCounter() {
+  const counts = getPlotCounts();
+
   return (
     <section className="py-14 bg-slate-900/90 border-y border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,14 +22,14 @@ export default function StatsCounter() {
               2-Acre Plotted Layout Sales Status
             </h2>
             <p className="text-xs text-slate-400 max-w-md">
-              Located at Sakrayapatna village, Kadur Taluk, Chikkamagaluru District. Green indicates 22 available plots, Blue for 7 booked, and Red for 10 sold.
+              Located at Sakrayapatna village, Kadur Taluk, Chikkamagaluru District. Green indicates {counts.available} available plots, Blue for {counts.reserved} booked, and Red for {counts.sold} sold out of {counts.total} total sanctioned plots.
             </p>
           </div>
 
           <StatusOverviewCards
-            availableCount={22}
-            reservedCount={7}
-            soldCount={10}
+            availableCount={counts.available}
+            reservedCount={counts.reserved}
+            soldCount={counts.sold}
           />
         </div>
       </div>

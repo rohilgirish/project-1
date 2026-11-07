@@ -1,17 +1,23 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { formatINR, formatNumberINR } from '@/lib/utils';
 import EMICalculator from '@/components/pricing/EMICalculator';
+import BrochureModal from '@/components/ui/BrochureModal';
+import BuyingProcessGuide from '@/components/home/BuyingProcessGuide';
+import PricingFAQ from '@/components/pricing/PricingFAQ';
 import {
   Download, CheckCircle2, ArrowRight, ShieldCheck, FileText, Sparkles
 } from 'lucide-react';
 
 export default function PricingPage() {
+  const [isBrochureOpen, setIsBrochureOpen] = useState(false);
+
   const pricingTiers = [
     {
       size: '30 × 40 ft (Standard)',
+      filterSize: '30x40',
       area: 1200,
       areaYards: '133.3 sq.yds',
       baseRate: 1300,
@@ -23,6 +29,7 @@ export default function PricingPage() {
     },
     {
       size: '30 × 40 ft (Corner Plot)',
+      filterSize: '30x40',
       area: 1200,
       areaYards: '133.3 sq.yds',
       baseRate: 1400,
@@ -34,6 +41,7 @@ export default function PricingPage() {
     },
     {
       size: 'Park & CA Boulevard Plot',
+      filterSize: '30x40',
       area: 1200,
       areaYards: '133.3 sq.yds',
       baseRate: 1450,
@@ -65,14 +73,14 @@ export default function PricingPage() {
             </p>
           </div>
 
-          <a
-            href="/images/layout-plan.png"
-            download="anurag-enclave-layout-costsheet.png"
+          <button
+            type="button"
+            onClick={() => setIsBrochureOpen(true)}
             className="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white font-bold px-5 py-3 rounded-2xl text-xs sm:text-sm shadow-xl transition-all cursor-pointer self-start md:self-auto"
           >
             <Download className="w-4 h-4 text-emerald-400" />
             <span>Download Masterplan & Cost Sheet</span>
-          </a>
+          </button>
         </div>
 
         {/* Pricing Tiers Cards */}
@@ -130,7 +138,7 @@ export default function PricingPage() {
               </div>
 
               <Link
-                href={`/plots?size=${tier.size.split(' ')[0]}`}
+                href={`/plots?size=${tier.filterSize}`}
                 className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-amber-500/20 transition-all cursor-pointer active:scale-95 duration-150"
               >
                 <span>View Matching Available Plots</span>
@@ -140,10 +148,7 @@ export default function PricingPage() {
           ))}
         </div>
 
-        {/* Taste-133 Villa Plot Financing & EMI Affordability Suite */}
-        <EMICalculator />
-
-        {/* Milestone Payment Schedule Table */}
+        {/* Milestone Payment Schedule Table (Fixed token amounts harmonized with cards) */}
         <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-4">
           <div className="flex items-center justify-between">
             <div>
@@ -161,22 +166,22 @@ export default function PricingPage() {
                 <tr className="border-b border-slate-800 text-slate-400 uppercase tracking-wider">
                   <th className="p-3">Stage / Milestone</th>
                   <th className="p-3">Timeline</th>
-                  <th className="p-3">Payment Percentage</th>
+                  <th className="p-3">Payment Amount / Percentage</th>
                   <th className="p-3">Deliverables</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/60 text-slate-300">
                 <tr>
                   <td className="p-3 font-semibold text-white">Booking Token Advance</td>
-                  <td className="p-3 text-slate-400">At the time of selection</td>
-                  <td className="p-3 font-bold text-emerald-400">₹1,00,000 / ₹2,00,000</td>
+                  <td className="p-3 text-slate-400">At plot selection</td>
+                  <td className="p-3 font-bold text-emerald-400">₹50,000 (Standard) / ₹1,00,000 (Corner / Park)</td>
                   <td className="p-3">Official Plot Allotment Letter</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold text-white">Agreement for Sale</td>
                   <td className="p-3 text-slate-400">Within 15 days of token</td>
-                  <td className="p-3 font-bold text-emerald-400">20% (Less token paid)</td>
-                  <td className="p-3">Registered Agreement + Legal Scrutiny Report</td>
+                  <td className="p-3 font-bold text-emerald-400">20% (Less token advance paid)</td>
+                  <td className="p-3">Registered Agreement + Legal Scrutiny Dossier</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold text-white">Infrastructure & Demarcation</td>
@@ -194,6 +199,15 @@ export default function PricingPage() {
             </table>
           </div>
         </div>
+
+        {/* Step-by-Step Buying Process Guide */}
+        <BuyingProcessGuide />
+
+        {/* Taste-133 Villa Plot Financing & EMI Affordability Suite */}
+        <EMICalculator />
+
+        {/* Comprehensive Buyer FAQ */}
+        <PricingFAQ />
 
         {/* Direct Consultation & Site Visit Scheduling CTA */}
         <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-amber-950/30 border border-amber-500/30 rounded-3xl p-6 sm:p-10 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
@@ -225,6 +239,12 @@ export default function PricingPage() {
           </div>
         </div>
       </div>
+
+      {/* Gated Brochure Modal */}
+      <BrochureModal
+        isOpen={isBrochureOpen}
+        onClose={() => setIsBrochureOpen(false)}
+      />
     </div>
   );
 }

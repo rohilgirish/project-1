@@ -20,13 +20,25 @@ export default function ContactPage() {
     notes: ''
   });
   const [honeypot, setHoneypot] = useState('');
-  const [dpdpConsent, setDpdpConsent] = useState(true);
+  const [dpdpConsent, setDpdpConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [formError, setFormError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.phone) return;
+    setFormError('');
+
+    if (!formData.name || !formData.phone) {
+      setFormError('Please enter your full name and 10-digit mobile number.');
+      return;
+    }
+
+    if (!dpdpConsent) {
+      setFormError('Please acknowledge the DPDP Act 2023 consent checkbox to proceed.');
+      return;
+    }
+
     setSubmitting(true);
 
     try {
@@ -37,16 +49,18 @@ export default function ContactPage() {
         preferredDate: formData.visitDate,
         plotNumber: formData.plotSize,
         type: 'site_visit',
-        dpdpConsent,
+        dpdpConsent: true,
         website_url_check: honeypot
       });
 
       if (res.success) {
         setSubmitted(true);
         confetti({ particleCount: 70, spread: 70, origin: { y: 0.6 } });
+      } else {
+        setFormError(res.error || 'Unable to record your appointment. Please contact our sales desk directly on WhatsApp.');
       }
-    } catch (err) {
-      console.error(err);
+    } catch (err: unknown) {
+      setFormError(err instanceof Error ? err.message : 'Network sync error. Please message our sales desk on WhatsApp.');
     } finally {
       setSubmitting(false);
     }
@@ -276,6 +290,22 @@ export default function ContactPage() {
                     I consent to receiving project documentation, layout plans, and appointment confirmations via WhatsApp / Phone under the Digital Personal Data Protection (DPDP) Act 2023. <Link href="/privacy" className="text-amber-400 hover:underline">Privacy Policy</Link>.
                   </label>
                 </div>
+
+                {/* Error Box with Direct WhatsApp Fallback */}
+                {formError && (
+                  <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs space-y-2">
+                    <p className="font-semibold">{formError}</p>
+                    <a
+                      href={whatsAppUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 text-emerald-400 font-bold hover:underline"
+                    >
+                      <MessageSquare className="w-3.5 h-3.5" />
+                      <span>Connect Directly on WhatsApp (+91 98860 12345)</span>
+                    </a>
+                  </div>
+                )}
 
                 <button
                   type="submit"

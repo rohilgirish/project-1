@@ -56,7 +56,7 @@ export async function submitLead(
     type: leadData.type || 'enquiry',
     budget: leadData.budget || '',
     utmSource: autoUtm,
-    dpdpConsent: leadData.dpdpConsent !== false,
+    dpdpConsent: leadData.dpdpConsent === true,
     createdAt: new Date().toISOString(),
   };
 
@@ -80,22 +80,30 @@ export async function submitLead(
           description: data.error || 'Too many submissions. Please wait a few moments.',
           duration: 5000,
         });
-        return { success: false, lead, error: data.error };
+        return { success: false, lead, error: data.error || 'Rate limit reached' };
       }
 
-      toast.error('Submission Issue', {
-        description: data.error || 'Unable to record your inquiry. Please try again.',
-        duration: 4000,
+      if (res.status === 503) {
+        toast.error('Database Sync Issue', {
+          description: data.error || 'Inquiry could not be saved to our CRM. Please message our sales desk directly on WhatsApp at +91 98860 12345.',
+          duration: 6000,
+        });
+        return { success: false, lead, error: data.error || 'Service unavailable' };
+      }
+
+      toast.error('Submission Error', {
+        description: data.error || 'Unable to record your inquiry. Please reach our sales desk directly on WhatsApp at +91 98860 12345.',
+        duration: 5000,
       });
-      return { success: false, lead, error: data.error };
+      return { success: false, lead, error: data.error || 'Submission failed' };
     }
 
-    // 2. Save to client localStorage as offline fallback & fast cache
+    // 2. Save to client localStorage as fast session cache
     try {
       if (typeof window !== 'undefined') {
-        const existing: Lead[] = JSON.parse(localStorage.getItem('horizon_leads') || '[]');
+        const existing: Lead[] = JSON.parse(localStorage.getItem('anurag_leads') || '[]');
         existing.unshift(data.lead || lead);
-        localStorage.setItem('horizon_leads', JSON.stringify(existing.slice(0, 50)));
+        localStorage.setItem('anurag_leads', JSON.stringify(existing.slice(0, 50)));
       }
     } catch (err) {
       console.warn('LocalStorage save skipped:', err);
@@ -108,24 +116,17 @@ export async function submitLead(
 
     return { success: true, lead: data.lead || lead, downloadToken: data.downloadToken };
   } catch (err) {
-    console.warn('Network sync error; saving to local session:', err);
+    console.error('Lead submission network failure:', err);
 
-    // Offline fallback save
-    try {
-      if (typeof window !== 'undefined') {
-        const existing: Lead[] = JSON.parse(localStorage.getItem('horizon_leads') || '[]');
-        existing.unshift(lead);
-        localStorage.setItem('horizon_leads', JSON.stringify(existing.slice(0, 50)));
-      }
-    } catch {
-      // ignore
-    }
-
-    toast.success('Request Received', {
-      description: `Thank you ${lead.fullName}! We have noted your request offline.`,
-      duration: 4000,
+    toast.error('Unable to Save Inquiry', {
+      description: 'Could not connect to the server. Please reach us directly on WhatsApp at +91 98860 12345.',
+      duration: 6000,
     });
 
-    return { success: true, lead };
+    return {
+      success: false,
+      lead,
+      error: 'Network connectivity error. Please connect directly via WhatsApp: +91 98860 12345.',
+    };
   }
 }

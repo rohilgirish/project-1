@@ -4,10 +4,14 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Compass, ArrowRight, ShieldCheck, Download, Sparkles, MapPin, CheckCircle2, FileText } from 'lucide-react';
 import { PROJECT_SPECS } from '@/data/landmarks';
+import { getPlotCounts } from '@/data/plots';
+import { useLanguage } from '@/context/LanguageContext';
 import BrochureModal from '@/components/ui/BrochureModal';
 
 export default function HeroSection() {
   const [isBrochureOpen, setIsBrochureOpen] = useState(false);
+  const counts = getPlotCounts();
+  const { t } = useLanguage();
   return (
     <section className="relative min-h-[95vh] flex items-center justify-center pt-28 pb-20 overflow-hidden bg-slate-950">
       {/* Background Aerial Landscape Visual */}
@@ -28,7 +32,7 @@ export default function HeroSection() {
         <div className="inline-flex flex-wrap items-center justify-center gap-2 bg-slate-900/90 border border-slate-800 rounded-full px-4 py-1.5 shadow-2xl backdrop-blur-xl">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
           <span className="text-xs font-medium text-slate-200">
-            2 Acres Gated Layout • <strong className="text-emerald-400 font-bold">22 Plots Available</strong> out of 39
+            2 Acres Gated Layout • <strong className="text-emerald-400 font-bold">{counts.available} Plots Available</strong> out of {counts.total}
           </span>
           <span className="text-slate-700 hidden sm:inline">|</span>
           <span className="text-xs text-amber-400 font-mono font-semibold">
@@ -42,17 +46,17 @@ export default function HeroSection() {
         {/* Main Headline */}
         <div className="space-y-4 max-w-4xl mx-auto">
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.12]">
-            Own Your Villa Plot in{' '}
+            {t('hero.title.prefix')}{' '}
             <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
-              Anurag Enclave
+              {t('hero.title.brand')}
             </span>{' '}
             <span className="block text-2xl sm:text-4xl lg:text-5xl text-slate-300 font-medium mt-1">
-              Sakrayapatna, Chikkamagaluru
+              {t('hero.title.location')}
             </span>
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 max-w-3xl mx-auto font-normal leading-relaxed">
-            Craft your family’s sanctuary with <strong className="text-white font-semibold">ANURAGH FOUNDATION</strong> — an exclusive 2-acre gated enclave of <strong className="text-amber-300 font-semibold font-mono">39 luxury villa plots</strong> (30×40 ft / 1,200 sq.ft) framed by serene landscapes right off the Chikkamagaluru–Kadur Highway. Featuring 9.0-meter wide grand asphalt avenues, a dedicated Civic Amenity site, a 48m lush botanical park belt, and 100% clear A-Khata titles poised for generational value.
+            {t('hero.description')}
           </p>
         </div>
 
@@ -63,14 +67,14 @@ export default function HeroSection() {
             className="w-full sm:w-auto flex items-center justify-center gap-2.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-extrabold px-6 py-3.5 rounded-2xl text-sm shadow-xl shadow-amber-500/25 active:scale-95 transition-all duration-150 cursor-pointer"
           >
             <Compass className="w-4 h-4 text-slate-950" />
-            <span>Explore 3D Layout (39 Plots)</span>
+            <span>{t('hero.cta.3d')}</span>
           </Link>
 
           <Link
             href="/contact"
             className="w-full sm:w-auto flex items-center justify-center gap-2 bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 hover:border-amber-500/40 text-white font-bold px-5 py-3.5 rounded-2xl text-sm shadow-lg active:scale-95 transition-all duration-150 cursor-pointer"
           >
-            <span>Book Site Visit</span>
+            <span>{t('hero.cta.visit')}</span>
             <ArrowRight className="w-4 h-4 text-amber-400" />
           </Link>
 
@@ -80,7 +84,7 @@ export default function HeroSection() {
             className="w-full sm:w-auto flex items-center justify-center gap-2 bg-slate-900/60 hover:bg-slate-850 border border-slate-800 hover:border-slate-600 text-slate-300 hover:text-white font-semibold px-4 py-3.5 rounded-2xl text-sm shadow-sm active:scale-95 transition-all duration-150 cursor-pointer"
           >
             <FileText className="w-4 h-4 text-amber-400" />
-            <span>Blueprint & Price PDF</span>
+            <span>{t('hero.cta.brochure')}</span>
           </button>
         </div>
 

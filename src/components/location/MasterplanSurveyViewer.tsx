@@ -7,11 +7,13 @@ import {
   CheckCircle2, Layers, ZoomIn, Eye, Sparkles, Building2, Trees
 } from 'lucide-react';
 import { PROJECT_SPECS } from '@/data/landmarks';
+import BrochureModal from '@/components/ui/BrochureModal';
 
 export default function MasterplanSurveyViewer() {
   const [activeTab, setActiveTab] = useState<'cad' | 'survey' | 'split'>('split');
   const [modalImage, setModalImage] = useState<string | null>(null);
   const [modalTitle, setModalTitle] = useState<string>('');
+  const [isBrochureOpen, setIsBrochureOpen] = useState(false);
 
   const openModal = (src: string, title: string) => {
     setModalImage(src);
@@ -147,14 +149,14 @@ export default function MasterplanSurveyViewer() {
                 <span className="font-bold text-white text-xs">Sanctioned CAD Layout Plan</span>
               </div>
               <div className="flex items-center gap-2">
-                <a
-                  href="/images/layout-plan.png"
-                  download="anurag-enclave-cad-layout.png"
-                  className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+                <button
+                  type="button"
+                  onClick={() => setIsBrochureOpen(true)}
+                  className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
                   title="Download CAD Layout"
                 >
                   <Download className="w-3.5 h-3.5" />
-                </a>
+                </button>
                 <button
                   onClick={() => openModal('/images/layout-plan.png', 'ANURAG ENCLAVE — Sanctioned CAD Layout Plan (39 Plots, 9m Road, CA Site, Park)')}
                   className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
@@ -262,14 +264,14 @@ export default function MasterplanSurveyViewer() {
               <p className="text-xs text-slate-400">Approved plotted development plan with plot dimensions and civic reservations</p>
             </div>
             <div className="flex items-center gap-3">
-              <a
-                href="/images/layout-plan.png"
-                download="anurag-enclave-cad-layout.png"
-                className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-xl text-xs font-semibold transition-colors"
+              <button
+                type="button"
+                onClick={() => setIsBrochureOpen(true)}
+                className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
               >
                 <Download className="w-4 h-4 text-emerald-400" />
                 <span className="hidden sm:inline">Download CAD File</span>
-              </a>
+              </button>
               <button
                 onClick={() => openModal('/images/layout-plan.png', 'ANURAG ENCLAVE — Sanctioned CAD Layout Plan')}
                 className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-lg shadow-emerald-500/20"
@@ -388,6 +390,12 @@ export default function MasterplanSurveyViewer() {
           </div>
         </div>
       )}
+
+      {/* Gated Masterplan Download Modal */}
+      <BrochureModal
+        isOpen={isBrochureOpen}
+        onClose={() => setIsBrochureOpen(false)}
+      />
     </div>
   );
 }

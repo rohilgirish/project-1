@@ -7,6 +7,7 @@ import ExitIntentPopup from '@/components/home/ExitIntentPopup';
 import ScrollToTop from '@/components/ui/ScrollToTop';
 import FloatingWhatsAppCTA from '@/components/ui/FloatingWhatsAppCTA';
 import { Toaster } from 'sonner';
+import { LanguageProvider } from '@/context/LanguageContext';
 
 
 export const metadata: Metadata = {
@@ -89,29 +90,31 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full w-full max-w-full overflow-x-hidden flex flex-col bg-slate-950 text-slate-100 selection:bg-amber-400 selection:text-slate-950">
-        <Navbar />
-        <div className="flex-1 w-full max-w-full overflow-x-hidden">
-          {children}
-        </div>
-        <Footer />
-        <StickyCTA />
-        <FloatingWhatsAppCTA />
-        <ExitIntentPopup />
-        {/* Scroll To Top Button */}
-        <ScrollToTop />
-        {/* Emil Kowalski's Sonner Toast Provider */}
-        <Toaster
-          position="bottom-right"
-          theme="dark"
-          toastOptions={{
-            style: {
-              background: '#0f172a',
-              border: '1px solid rgba(189, 159, 103, 0.3)',
-              color: '#f8fafc',
-              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5)',
-            },
-          }}
-        />
+        <LanguageProvider>
+          <Navbar />
+          <div className="flex-1 w-full max-w-full overflow-x-hidden">
+            {children}
+          </div>
+          <Footer />
+          <StickyCTA />
+          <FloatingWhatsAppCTA />
+          <ExitIntentPopup />
+          {/* Scroll To Top Button */}
+          <ScrollToTop />
+          {/* Emil Kowalski's Sonner Toast Provider */}
+          <Toaster
+            position="bottom-right"
+            theme="dark"
+            toastOptions={{
+              style: {
+                background: '#0f172a',
+                border: '1px solid rgba(189, 159, 103, 0.3)',
+                color: '#f8fafc',
+                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5)',
+              },
+            }}
+          />
+        </LanguageProvider>
       </body>
     </html>
   );

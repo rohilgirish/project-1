@@ -114,16 +114,6 @@ export default function Footer() {
                 <a href={`mailto:${PROJECT_SPECS.email}`} className="hover:text-white">{PROJECT_SPECS.email}</a>
               </div>
             </div>
-
-            <div className="pt-2">
-              <Link
-                href="/admin"
-                className="text-[11px] text-slate-600 hover:text-slate-400 transition-colors inline-flex items-center gap-1"
-              >
-                <span>Sales Admin Console</span>
-                <ArrowUpRight className="w-3 h-3" />
-              </Link>
-            </div>
           </div>
         </div>
 

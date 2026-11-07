@@ -5,8 +5,12 @@ import Link from 'next/link';
 import GradientTiltCard from '@/components/ui/GradientTiltCard';
 import NearbyLocationsGrid from '@/components/ui/NearbyLocationsGrid';
 import { Sparkles, ArrowRight, Compass, ShieldCheck } from 'lucide-react';
+import { getFeaturedAvailablePlots, getPlotCounts } from '@/data/plots';
 
 export default function FeaturedDealsSection() {
+  const featuredPlots = getFeaturedAvailablePlots(3);
+  const counts = getPlotCounts();
+
   return (
     <section className="py-20 bg-slate-900/50 border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
@@ -14,13 +18,13 @@ export default function FeaturedDealsSection() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div className="space-y-2">
             <span className="text-xs font-bold uppercase tracking-wider text-rose-400 bg-rose-500/10 px-3 py-1 rounded-full border border-rose-500/20">
-              Limited Availability
+              Live Allocation • {counts.available} Plots Open
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
-              Featured Villa Plots & Hot Deals
+              Featured Available Villa Plots
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 max-w-xl">
-              Hover over our curated signature plots below to review dimensions, Vastu facings, and exclusive early-allocation incentives.
+              Verified available plots ready for immediate token allocation. Review dimensions, Vastu facings, and clear title documentation.
             </p>
           </div>
 
@@ -28,39 +32,24 @@ export default function FeaturedDealsSection() {
             href="/plots"
             className="text-xs sm:text-sm font-bold text-emerald-400 hover:text-emerald-300 flex items-center gap-1.5 self-start md:self-end"
           >
-            <span>Explore All 39 Plots</span>
+            <span>Explore All {counts.total} Plots ({counts.available} Available)</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
-        {/* 3D Tilting Gradient Cards Grid */}
+        {/* 3D Tilting Gradient Cards Grid (Dynamically rendered from real available plots) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 justify-items-center">
-          <GradientTiltCard
-            title="Plot 01 • Prime Corner Villa"
-            subtitle="30 × 40 ft (1,200 sq.ft)"
-            description="Premium North-East Vastu corner plot facing the main 9.0m wide asphalt avenue with dual frontage access and underground utilities."
-            badge="Launch Deal • ₹15.6L"
-            linkText="View Plot 01 Details"
-            linkHref="/plots"
-          />
-
-          <GradientTiltCard
-            title="Plot 15 • Botanical Sanctuary"
-            subtitle="30 × 40 ft (1,200 sq.ft)"
-            description="Exclusive villa plot directly fronting the 48.17m botanical green park buffer and central Civic Amenity zone."
-            badge="Park-Adjacent • Available"
-            linkText="Inspect On 3D Map"
-            linkHref="/plots"
-          />
-
-          <GradientTiltCard
-            title="Plot 09 • Executive Corner"
-            subtitle="30 × 40 ft (1,200 sq.ft)"
-            description="Ideal 3BHK duplex villa footprint with clear title deed, pre-approved bank loan up to 80%, and zero title encumbrance."
-            badge="Hot Deal • ₹16.8L"
-            linkText="Calculate Plot EMI"
-            linkHref="/pricing"
-          />
+          {featuredPlots.map((plot) => (
+            <GradientTiltCard
+              key={plot.id}
+              title={`${plot.number} • ${plot.isCorner ? 'Corner Villa' : plot.isParkFacing ? 'Park-Facing Villa' : `${plot.facing} Villa`}`}
+              subtitle={`${plot.size} ft (${plot.area} sq.ft)`}
+              description={plot.description || 'DC Converted & Grama Panchayat approved residential villa plot in Anurag Enclave.'}
+              badge={`Available • ₹${(plot.price / 100000).toFixed(1)} Lakhs`}
+              linkText={`Inspect ${plot.number} Details`}
+              linkHref="/plots"
+            />
+          ))}
         </div>
 
         {/* Connectivity & Nearby Matrix Teaser */}

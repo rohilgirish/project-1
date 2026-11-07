@@ -1515,3 +1515,22 @@ export const PLOTS_DATA: Plot[] = [
     "description": "North-facing residential plot along the southern 9-meter avenue connecting to Sakrayapatna highway link."
   }
 ];
+
+export function getPlotCounts() {
+  const available = PLOTS_DATA.filter(p => p.status === 'available').length;
+  const reserved = PLOTS_DATA.filter(p => p.status === 'reserved').length;
+  const sold = PLOTS_DATA.filter(p => p.status === 'sold').length;
+  const total = PLOTS_DATA.length;
+  return { available, reserved, sold, total };
+}
+
+export function getStartingPrice(): number {
+  const availablePlots = PLOTS_DATA.filter(p => p.status === 'available');
+  if (availablePlots.length === 0) return 1560000;
+  return Math.min(...availablePlots.map(p => p.price));
+}
+
+export function getFeaturedAvailablePlots(limit = 3): Plot[] {
+  return PLOTS_DATA.filter(p => p.status === 'available').slice(0, limit);
+}
+

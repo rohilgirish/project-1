@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { submitLead } from '@/lib/leads';
+import BrochureModal from '@/components/ui/BrochureModal';
 
 interface Props {
   plot: Plot | null;
@@ -28,6 +29,7 @@ export default function PlotDetailModal({
   isComparing
 }: Props) {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [isBrochureOpen, setIsBrochureOpen] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [honeypot, setHoneypot] = useState('');
@@ -314,14 +316,14 @@ export default function PlotDetailModal({
               </ul>
 
               <div className="pt-3 border-t border-slate-800/80 flex flex-wrap gap-2">
-                <a
-                  href="/images/layout-plan.png"
-                  download="anurag-enclave-cad-layout.png"
-                  className="flex items-center gap-1.5 text-xs font-medium text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 px-3 py-2 rounded-lg transition-colors"
+                <button
+                  type="button"
+                  onClick={() => setIsBrochureOpen(true)}
+                  className="flex items-center gap-1.5 text-xs font-medium text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 px-3 py-2 rounded-lg transition-colors cursor-pointer"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>Download CAD Layout Plan</span>
-                </a>
+                </button>
               </div>
             </div>
 
@@ -436,6 +438,12 @@ export default function PlotDetailModal({
           </div>
         </div>
       </div>
+
+      {/* Gated Blueprint Download Modal */}
+      <BrochureModal
+        isOpen={isBrochureOpen}
+        onClose={() => setIsBrochureOpen(false)}
+      />
     </div>
   );
 }
